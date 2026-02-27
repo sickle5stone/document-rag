@@ -1,23 +1,76 @@
 # Document RAG — Complete Reference
 
-This file is self-contained. All prompt templates, indexing instructions, query prompts, and maintenance workflows are here.
+This file is self-contained. Paste it into Opus as your instructions, then paste your project files for processing. All templates, query prompts, and maintenance workflows are in this one document.
 
-**For automated indexing:** Run Claude Code from workspace root and say:
-"Follow document-rag/INDEXING.md to index my codebase"
+## How to Use
 
-**For manual querying:** Copy the query prompts from Part 2 into your chat interface.
+**First run — Opus via Copilot Agent Mode (indexing):**
+1. Open workspace root in VS Code (all project folders + document-rag/)
+2. Select **Opus** as the model in Copilot Chat
+3. Enable **Agent Mode** (so Copilot can read and write files)
+4. Say: `@workspace Follow document-rag/INDEXING.md to index my codebase. Start with Step 1.`
+5. Copilot will scan projects, generate chunks, and write them to `knowledge-base/`
+6. Process in batches if context gets long: `Continue with the next 3 projects.`
+7. After all projects: `Run Step 8 — build INDEX.md.`
+
+**Ongoing queries — cheaper model:**
+1. Switch to a faster/cheaper model in Copilot Chat
+2. Use the query prompts from Part 2 (Chunk Selector → Grounded Query)
+
+**Adding new projects later:**
+1. Clone new repo into workspace root
+2. Same prompt — Opus reads INDEX.md, sees it's not in the Source Map, indexes only the new project
 
 ---
 
-# Part 1: Automated Indexing
+# Knowledge Base Folder Structure
 
-Opus reads this and executes it. The steps below generate the knowledge base.
+Create this structure before starting. All chunks and the index go here.
+
+```
+document-rag/knowledge-base/
+├── INDEX.md               ← Master index (generated in Step 8)
+├── domain/                ← Service overviews and domain knowledge
+│   ├── [project-a].md    ← One file per project (Steps 3)
+│   └── [project-b].md
+├── codebase/              ← Code-level documentation (Step 9, optional)
+│   └── [project]-[file].md
+├── processes/             ← Workflows and procedures
+│   └── cross-service-flows.md  ← End-to-end flows (Step 6)
+└── reference/             ← Root-level docs, configs, standards
+    ├── [root-doc].md      ← Root .md files (Step 4)
+    └── [project]-config.md ← Config extractions (Step 5)
+```
+
+---
+
+# Part 1: Indexing
 
 ---
 
 ## Step 1: Discovery
 
-Scan the workspace root directory.
+**If running in Claude Code:** Scan the workspace root directory automatically.
+**If pasting into Opus chat:** List your project folders and root docs below, or paste them one at a time.
+
+**Detect projects:** A directory is a project if it contains any of: `.git/`, `package.json`, `Dockerfile`, `go.mod`, `Cargo.toml`, `requirements.txt`, `pom.xml`.
+
+**Skip these directories:**
+`.github`, `.idea`, `.venv`, `.vscode`, `node_modules`, `archive`, `working_directory`, `document-rag`, `dist`, `build`, `coverage`, `__pycache__`
+
+**Collect root-level docs:** `.md` files in the root directory (not in subdirectories).
+
+**Skip root-level files:** `.env`, `*.ps1`, `.gitignore`, `package.json`, `*.lock`, `*.log`
+
+**Check what's already indexed:** If `knowledge-base/INDEX.md` has a Source Map section, extract the list of already-indexed items. Skip those — only process new ones.
+
+Report:
+```
+Projects detected: [count]
+Already indexed:   [count]
+New to index:      [count]
+Root docs to index: [count]
+```
 
 **Detect projects:** List immediate subdirectories. A directory is a project if it contains any of: `.git/`, `package.json`, `Dockerfile`, `go.mod`, `Cargo.toml`, `requirements.txt`, `pom.xml`.
 
