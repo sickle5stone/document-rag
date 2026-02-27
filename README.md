@@ -20,7 +20,21 @@ Build a grounded, cited, searchable knowledge base from your documents — using
 
 All prompts are optimized so the query model can be significantly weaker than the indexing model.
 
-## Quick Start (5 Minutes to First Answer)
+## Quick Start
+
+### Option A: Automated with Claude Code (recommended for large codebases)
+
+```
+1. Clone this repo into your workspace root (alongside your project folders)
+2. Open Claude Code at the workspace root
+3. Say: "Follow document-rag/INDEXING.md to index my codebase"
+4. Claude scans all projects, generates chunks, builds INDEX.md
+5. Take knowledge-base/ to your query environment
+```
+
+See [INDEXING.md](INDEXING.md) for the full instruction file.
+
+### Option B: Manual copy-paste (any LLM chat interface)
 
 ```
 1. Copy the prompt from prompts/01-intake-and-chunk.md
@@ -36,6 +50,7 @@ All prompts are optimized so the query model can be significantly weaker than th
 ```
 document-rag/
 ├── README.md                  ← You are here
+├── INDEXING.md                ← Instruction file for Claude Code automation
 ├── GUIDE.md                   ← Full methodology
 ├── PROMPTS.md                 ← All prompts in one file (copy-paste ready)
 ├── prompts/                   ← Individual prompt files
