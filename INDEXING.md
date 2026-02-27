@@ -330,34 +330,278 @@ Total chunks: [count]
 
 ---
 
-## Step 9: Deep Indexing (Optional — On Request Only)
+## Step 9: Deep Indexing — One Project at a Time
 
-Only run when the user asks to go deeper on a specific project.
+This step replaces the shallow Steps 3-5 with a thorough code-level analysis. Run it per-project so progress is saved even if you run out of tokens.
 
-1. Glob for code files: `[project]/src/**/*.{ts,js,py,go,java}`
-2. Focus on: routes, controllers, handlers, services, models — skip tests, utils, types/interfaces
-3. Read each significant file
-4. Generate code extraction chunks:
+**How to use:** Paste this entire INDEXING.md into Opus (Copilot Agent Mode or chat), then say:
 
-```markdown
-## [Function/Class/Module Name]
+> `Deep index [project-name]. Follow Step 9 in INDEXING.md.`
 
-ID: [PREFIX]-API-[NNN]
-Keywords: [function name, what it does, technologies, related terms]
-Summary: [What question does this chunk answer?]
-Source: [file path]
-Type: [function / class / module / config / endpoint]
+To continue after a token break:
 
-Purpose: [1-2 sentences, plain English]
-Inputs: [parameters, types, expected values]
-Outputs: [return values, side effects]
-Dependencies: [other functions/services/systems called]
-Key logic: [important business logic in plain English]
-Edge cases: [how failures are handled]
+> `Continue deep indexing. Check knowledge-base/ for what's already done and pick up the next unfinished project.`
+
+---
+
+### 9a. Scope the project
+
+1. Read `[project]/package.json` (or equivalent manifest). Extract: name, description, all scripts, all dependencies (prod + dev).
+2. Map the full file tree: `[project]/src/**/*.{ts,js,py,go,java,rs}` — list every file with its path.
+3. Classify each file into one of:
+   - **CORE** — routes, controllers, handlers, services, models, middleware, jobs, workers, commands
+   - **SUPPORT** — utils, helpers, validators, mappers, transformers, formatters
+   - **TYPE** — types, interfaces, enums, constants, schemas (Zod/Joi/etc.)
+   - **CONFIG** — database config, app config, env loading, dependency injection setup
+   - **TEST** — test files, fixtures, mocks, factories
+   - **SKIP** — generated files, index re-exports, barrel files with no logic
+
+4. Report the file map:
+```
+[project-name] file map:
+CORE:    [count] files — [list paths]
+SUPPORT: [count] files — [list paths]
+TYPE:    [count] files — [list paths]
+CONFIG:  [count] files — [list paths]
+TEST:    [count] files (skipping)
+SKIP:    [count] files (skipping)
 ```
 
-5. Write to `document-rag/knowledge-base/codebase/[project]-[filename].md`
-6. Update INDEX.md
+Read ALL files classified as CORE, SUPPORT, TYPE, and CONFIG before generating any chunks. Do not summarize from file names or imports alone.
+
+---
+
+### 9b. Generate the Architecture chunk
+
+After reading all code, write one architecture chunk per project:
+
+```markdown
+## [Project Name] — Architecture
+
+ID: [PREFIX]-ARCH-001
+Keywords: [project name, architecture, structure, layers, patterns, 5-8 total]
+Summary: [Describes how the project is structured internally and what patterns it uses]
+Source: [project directory]
+
+### Layer structure
+[Describe the actual layers: e.g., routes → controllers → services → repositories → database]
+[Name the specific files at each layer]
+
+### Data flow
+[Trace a typical request from entry point to response, naming actual functions and files]
+
+### Key patterns
+[List patterns found in the code: repository pattern, middleware chains, event emitters, dependency injection, etc.]
+[For each pattern, cite the file(s) where it's implemented]
+
+### State management
+[How does this project manage state? Database, cache, in-memory, external service?]
+[What ORMs, query builders, or database clients are used?]
+
+### Error handling
+[How are errors propagated? Custom error classes? Global error handler? Error codes?]
+
+### Auth / security
+[How does this project handle authentication and authorization?]
+[Middleware, guards, decorators, API key validation — cite specific files]
+```
+
+---
+
+### 9c. Generate Endpoint / Handler chunks
+
+For each route file, controller, or command handler, generate a chunk:
+
+```markdown
+## [HTTP Method] [Route Path] — [Short Description]
+
+ID: [PREFIX]-API-[NNN]
+Keywords: [route path, handler name, HTTP method, domain terms, 5-8 total]
+Summary: [What does this endpoint do and when would you call it?]
+Source: [file path:line number]
+
+### Request
+- Method: [GET/POST/PUT/DELETE/etc.]
+- Path: [exact route path with params]
+- Auth: [required/optional/none — what auth middleware is applied]
+- Body/Query/Params: [list each field with type and validation rules from the actual code]
+
+### Logic (trace the full execution path)
+[Step-by-step what the handler does — follow every function call to its implementation:]
+1. [Validates X using Y function in Z file — list every field checked and rejection conditions]
+2. [Calls serviceA.method(args) → describe what that method does internally, not just that it's called]
+3. [Inside serviceA.method(): queries table X WHERE condition, transforms result by doing Y, then...]
+4. [If condition A → path 1 (describe), else → path 2 (describe)]
+5. [Writes to database table X with fields {a, b, c} / publishes event Y with payload {x, y}]
+6. [Returns response shaped like {field: type, ...}]
+
+DO NOT stop at "calls the service." Follow the call into the service, into the repository, down to the database query. The goal is that someone reading this chunk understands the EXACT logic without opening the source code.
+
+### Response
+- Success: [status code, response shape with actual field names]
+- Errors: [list each error case with status code and when it triggers]
+
+### Side effects
+[Database writes, events emitted, external API calls, cache invalidation, emails sent — be specific]
+
+### Dependencies
+[List every service, repository, external client this handler calls — with file paths]
+```
+
+---
+
+### 9d. Generate Service / Business Logic chunks
+
+For each service file or significant business logic module:
+
+```markdown
+## [Service/Module Name] — [Short Description]
+
+ID: [PREFIX]-SVC-[NNN]
+Keywords: [service name, domain concepts, operations, 5-8 total]
+Summary: [What business capability does this service provide?]
+Source: [file path]
+
+### Public interface
+[List every exported function/method with signature and one-line description]
+
+### Internal logic
+[For each non-trivial function, write pseudocode-level detail:]
+- Step-by-step what it does (reference actual variable names and conditions)
+- Business rules enforced (e.g., "rejects orders over $10k without manager approval — line 47")
+- Database queries: what table, what WHERE clause, what JOINs (describe intent + shape)
+- External service calls: what method, what payload, what it does with the response
+- Conditional branches: "if X → does Y, else → does Z" (capture the actual branching logic)
+- Loops and iterations: what collection is iterated, what happens per item
+
+### Data transformations
+[What data does this service reshape? Input format → output format]
+
+### Edge cases handled
+[List specific edge cases the code handles: null checks, empty arrays, race conditions, retries]
+
+### Error scenarios
+[What errors can this service throw? Under what conditions?]
+```
+
+---
+
+### 9e. Generate Model / Schema chunks
+
+For each database model, schema definition, or significant type:
+
+```markdown
+## [Model/Type Name] — Schema
+
+ID: [PREFIX]-MDL-[NNN]
+Keywords: [model name, table name, entity, fields, 5-8 total]
+Summary: [What entity does this represent and what data does it hold?]
+Source: [file path]
+
+### Fields
+| Field | Type | Required | Default | Notes |
+|-------|------|----------|---------|-------|
+[List every field from the actual schema/model definition]
+
+### Relationships
+[Foreign keys, references, has-many/belongs-to — name the related models]
+
+### Indexes
+[List any indexes defined in the code or migration files]
+
+### Validation rules
+[Zod schemas, Joi validators, class-validator decorators — list actual constraints]
+
+### Used by
+[Which services/controllers read or write this model? List file paths]
+```
+
+---
+
+### 9f. Generate Config / Integration chunks
+
+For each significant config file, external integration, or infrastructure setup:
+
+```markdown
+## [Config/Integration Name]
+
+ID: [PREFIX]-CFG-[NNN]
+Keywords: [config name, service name, environment, 5-8 total]
+Summary: [What does this configure and what happens if it's wrong?]
+Source: [file path]
+
+### Settings
+[List every config value with its purpose — preserve actual defaults, ports, URLs, timeouts]
+
+### Environment variables required
+| Variable | Purpose | Default | Required |
+|----------|---------|---------|----------|
+[List from .env.example, config loading code, or docker-compose]
+
+### External connections
+[Databases, caches, message brokers, third-party APIs — list connection details from code]
+```
+
+---
+
+### 9g. Generate Middleware / Cross-cutting chunks
+
+For auth middleware, logging, rate limiting, validation middleware, error handlers:
+
+```markdown
+## [Middleware Name] — [Short Description]
+
+ID: [PREFIX]-MID-[NNN]
+Keywords: [middleware name, purpose, where applied, 5-8 total]
+Summary: [What does this middleware do and which routes use it?]
+Source: [file path]
+
+### Behavior
+[What this middleware does to the request/response cycle — step by step]
+
+### Applied to
+[List specific routes or route groups that use this middleware]
+
+### Configuration
+[Any options, thresholds, or toggles this middleware accepts]
+
+### Failure behavior
+[What happens when this middleware rejects a request? Status code, error format]
+```
+
+---
+
+### 9h. Write and checkpoint
+
+1. Write ALL chunks for the project to: `document-rag/knowledge-base/codebase/[project-name].md` (one file per project, all chunk types together)
+2. Write the overview + dependency chunks to: `document-rag/knowledge-base/domain/[project-name].md` (same as Step 3 but richer)
+3. Write config chunks to: `document-rag/knowledge-base/reference/[project-name]-config.md`
+4. After each project completes, update `document-rag/knowledge-base/INDEX.md` with all new chunk IDs
+
+**Checkpoint report after each project:**
+```
+✓ [project-name] deep indexed
+  Chunks written: [total count]
+  - ARCH: [count]  API: [count]  SVC: [count]
+  - MDL: [count]   CFG: [count]  MID: [count]
+  Files: codebase/[project-name].md, domain/[project-name].md
+  Next project: [name] or "All done"
+```
+
+---
+
+### 9i. Quality rules for deep indexing
+
+- **Read the code, don't guess.** Every claim in a chunk must come from a line of code you read. If you can't read a file, say "unread" — don't infer.
+- **Name names.** Use actual function names, variable names, file paths, table names. "It calls a service" is worthless. "It calls `OrderService.calculateTotal()` in `src/services/order.service.ts:45`" is useful.
+- **Trace the full call chain.** For endpoints, follow the logic from route → controller → service → repository → database. Don't stop at "calls the service layer."
+- **Capture business rules, not syntax.** "Validates the input" tells me nothing. "Rejects if quantity < 1 or total exceeds user's credit limit (checked via `CreditService.check()`)" tells me everything.
+- **Capture exact logic, not summaries.** The goal is that someone can understand implementation details from chunks alone without reading source. Write conditional branches (`if X → Y, else → Z`), loop behavior, transformation steps. Think "detailed pseudocode with real names," not "high-level overview."
+- **Follow calls to their conclusion.** When a handler calls a service, describe what that service does. When the service calls a repository, describe the query. Don't leave any black boxes.
+- **Include what's NOT handled.** If there's no input validation, no error handling, no auth check — note it. Gaps are as valuable as features.
+- **Increase chunk size limit for deep indexing.** Chunks in `codebase/` may go up to 1500 tokens if needed to capture full logic. Prefer one complete chunk over two fragments that lose context.
+- **One project at a time.** Finish writing all chunks and updating INDEX.md for one project before starting the next. This is the resume point if tokens run out.
+- **Skip secrets.** Never include actual API keys, passwords, connection strings, or tokens in chunks. Describe what they connect to, not the values.
 
 ---
 
