@@ -1,7 +1,17 @@
-# Indexing Instructions for Claude Code
+# Document RAG — Complete Reference
 
-Run Claude Code (Opus) from the workspace root directory and say:
-**"Follow document-rag/INDEXING.md to index my codebase"**
+This file is self-contained. All prompt templates, indexing instructions, query prompts, and maintenance workflows are here.
+
+**For automated indexing:** Run Claude Code from workspace root and say:
+"Follow document-rag/INDEXING.md to index my codebase"
+
+**For manual querying:** Copy the query prompts from Part 2 into your chat interface.
+
+---
+
+# Part 1: Automated Indexing
+
+Opus reads this and executes it. The steps below generate the knowledge base.
 
 ---
 
@@ -45,7 +55,7 @@ For root-level docs, use prefix `PLATFORM`.
 
 ---
 
-## Step 3: Index Each Project (P0 — Service Overview)
+## Step 3: Index Each Project — Service Overview
 
 For each new project, in order:
 
@@ -61,8 +71,6 @@ Read ONE of these (in priority order, first one that exists):
 If none exist, skip the project and note it as "no indexable entry point".
 
 ### 3b. Generate 2 chunks
-
-Using the content you read, generate exactly 2 chunks:
 
 **Chunk 1: Overview**
 ```markdown
@@ -102,7 +110,7 @@ If the file already exists, append the new chunks (don't overwrite).
 
 ---
 
-## Step 4: Index Root-Level Docs (P1 — Document Intake)
+## Step 4: Index Root-Level Docs — Document Intake
 
 For each unindexed root `.md` file:
 
@@ -139,9 +147,78 @@ Write to: `document-rag/knowledge-base/reference/[filename].md`
 
 ---
 
-## Step 5: Build INDEX.md
+## Step 5: Index Config and Structured Data
 
-After all chunks are generated, read every `.md` file in:
+For each project, check for config files that contain significant domain information:
+- `docker-compose.yml`, `Dockerfile`
+- `*.yaml`, `*.yml` (OpenAPI specs, deployment configs)
+- Environment config templates (`.env.example`, `config.ts`)
+
+Only index configs that reveal architecture, not boilerplate.
+
+Format:
+```markdown
+## [Config/Resource Name]
+
+ID: [PREFIX]-CFG-[NNN]
+Keywords: [5-8 keywords]
+Summary: [What question does this chunk answer?]
+Source: [file path]
+
+[Configuration described in natural language. Preserve all specific values: ports, URLs, thresholds, feature flags.]
+```
+
+Write to: `document-rag/knowledge-base/reference/[project]-config.md`
+
+---
+
+## Step 6: Detect Cross-Service Flows
+
+After indexing all projects, review the dependency chunks (all *-SYS-002 chunks). Identify workflows that span 3+ services.
+
+For each detected flow:
+
+```markdown
+## [Flow Name] — End-to-End
+
+ID: PLATFORM-PROC-[NNN]
+Keywords: [flow name, services involved, trigger, outcome, 5-8 total]
+Summary: [What business process this flow accomplishes, one sentence]
+Source: [inferred from dependency chunks]
+
+Trigger: [What initiates this flow]
+Steps:
+1. [Service A] → [action] → [output/event]
+2. [Service B] → [action] → [output/event]
+3. ...
+
+Happy path result: [What happens when everything works]
+Failure modes:
+- [Step N fails] → [consequence] → [recovery/retry behavior]
+
+Services involved: [list all service prefixes]
+Related chunks: [PREFIX-SYS-001, PREFIX-SYS-002, etc.]
+```
+
+Write to: `document-rag/knowledge-base/processes/cross-service-flows.md`
+
+---
+
+## Step 7: Generate Cross-References
+
+Review all chunks. For each chunk, identify strong relationships:
+- Describes parts of the same system
+- Upstream/downstream dependency
+- Same topic from different angles
+- One references a concept the other explains
+
+Add a `Related:` line to each chunk that has 2+ strong relationships.
+
+---
+
+## Step 8: Build INDEX.md
+
+Read every `.md` file in:
 - `document-rag/knowledge-base/domain/`
 - `document-rag/knowledge-base/codebase/`
 - `document-rag/knowledge-base/processes/`
@@ -149,7 +226,7 @@ After all chunks are generated, read every `.md` file in:
 
 Extract each chunk's ID, Title, Summary, and Keywords.
 
-Write `document-rag/knowledge-base/INDEX.md` with this structure:
+Write `document-rag/knowledge-base/INDEX.md`:
 
 ```markdown
 # Knowledge Base Index
@@ -178,7 +255,7 @@ Total chunks: [count]
 (All SYS chunks across all services)
 
 ### Processes (PROC)
-(etc.)
+(etc. for each category that has chunks)
 
 ---
 
@@ -200,14 +277,14 @@ Total chunks: [count]
 
 ---
 
-## Step 6: Deep Indexing (Optional — On Request Only)
+## Step 9: Deep Indexing (Optional — On Request Only)
 
-Only run this when the user asks to go deeper on a specific project.
+Only run when the user asks to go deeper on a specific project.
 
-1. Glob for code files in the target project: `[project]/src/**/*.{ts,js,py,go,java}`
+1. Glob for code files: `[project]/src/**/*.{ts,js,py,go,java}`
 2. Focus on: routes, controllers, handlers, services, models — skip tests, utils, types/interfaces
 3. Read each significant file
-4. Generate P2 chunks (code extraction):
+4. Generate code extraction chunks:
 
 ```markdown
 ## [Function/Class/Module Name]
@@ -231,10 +308,96 @@ Edge cases: [how failures are handled]
 
 ---
 
-## Rules
+# Part 2: Querying (Manual — Use in Any Chat Interface)
 
-- **Do NOT index files containing secrets** (.env, credentials, API keys). If you encounter one, skip it.
-- **Do NOT include company names, product names, or identifying information** in chunk content. Use generic descriptions.
+Copy these prompts into your query model (Copilot, ChatGPT, etc.).
+
+---
+
+## Chunk Selector — Find Relevant Chunks
+
+Use this when you have a question and need to find which chunks to read.
+
+```
+You are a retrieval assistant.
+
+Given the INDEX below, return the 3-5 chunk IDs most relevant to the QUESTION.
+
+For each ID, write one sentence explaining why it is relevant.
+
+INDEX:
+[paste INDEX.md here]
+
+QUESTION:
+[your question here]
+```
+
+---
+
+## Grounded Query — Get a Cited Answer
+
+Use this after you have the relevant chunks.
+
+```
+Answer the question using ONLY the chunks below.
+
+Rules:
+1. Use ONLY information from the chunks. If not found, say "Not in provided chunks."
+2. Cite chunk IDs inline like this: [SYS-001]
+3. If chunks conflict, note both versions with their IDs.
+
+CHUNKS:
+[paste selected chunks here]
+
+QUESTION:
+[your question here]
+```
+
+---
+
+# Part 3: Maintenance
+
+---
+
+## Knowledge Base Review (Quarterly)
+
+```
+Review this knowledge base index. Identify:
+
+1. GAPS: Topics that seem incomplete or missing
+2. OVERLAPS: Chunks that may duplicate information
+3. STALE: Chunks that may need updating (check dates)
+4. MISSING LINKS: Chunks that should cross-reference each other but don't
+
+For each finding, cite the specific chunk IDs involved.
+
+INDEX:
+[paste INDEX.md here]
+```
+
+---
+
+## Adding New Projects
+
+When you clone a new repo into the workspace root:
+1. Re-run: "Follow document-rag/INDEXING.md to index my codebase"
+2. Opus reads INDEX.md, sees the new project isn't in the Source Map
+3. Only the new project gets indexed
+4. INDEX.md gets updated with the new entries
+
+## Updating Existing Chunks
+
+When information changes:
+- **Replace:** Update chunk content, change the date. Use when old info is fully superseded.
+- **Version:** Keep both chunks. Add `Supersedes: [OLD-ID]` to the new one.
+- **Deprecate:** Mark with `Status: DEPRECATED`. Remove from INDEX.md but keep the file.
+
+---
+
+# Rules
+
+- **Do NOT index files containing secrets** (.env, credentials, API keys). Skip them.
+- **Do NOT include company names, product names, or identifying information** in chunks. Use generic descriptions.
 - **Keep chunks self-contained.** Each chunk must be understandable alone.
 - **Keep chunks under 800 tokens.** The query model has limited context.
 - **Summaries describe what QUESTION the chunk answers**, not what it contains.
