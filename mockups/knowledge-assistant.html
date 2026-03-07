@@ -458,7 +458,7 @@
       </div>
     </div>
     <div class="sidebar-actions">
-      <button class="btn-new-chat">
+      <button class="btn-new-chat" onclick="switchView('new')">
         <span class="material-symbols-outlined">add</span>
         New Chat
       </button>
@@ -588,6 +588,50 @@
       </div>
       <div class="input-area">
         <div class="input-container">
+          <div class="input-box">
+            <button class="icon-btn"><span class="material-symbols-outlined">attach_file</span></button>
+            <input type="text" placeholder="Ask a question about your documents…" />
+            <button class="send-btn"><span class="material-symbols-outlined">arrow_upward</span></button>
+          </div>
+          <p class="input-disclaimer">AI-generated responses may be inaccurate. Cross-reference with documentation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ New Chat View ═══ -->
+    <div class="view" id="view-new">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: var(--s-600);">
+        <div style="text-align:center; max-width:520px;">
+          <div style="width:56px; height:56px; background:linear-gradient(135deg, var(--cta) 0%, #B45309 100%); border-radius:16px; display:grid; place-items:center; margin:0 auto var(--s-300); box-shadow: 0 2px 12px rgba(217,119,6,0.2);">
+            <span class="material-symbols-outlined" style="color:white; font-size:28px; font-variation-settings:'FILL' 1">bolt</span>
+          </div>
+          <h3 style="font-family:var(--font-display); font-size:24px; color:var(--text-primary); margin-bottom:var(--s-100);">What would you like to know?</h3>
+          <p style="font-size:14px; color:var(--text-secondary); line-height:1.6; margin-bottom:var(--s-600);">Search across 147 indexed pages from your internal documentation. Ask questions in natural language.</p>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--s-150); margin-bottom:var(--s-600);">
+            <button style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:12px; padding:var(--s-200) var(--s-200); text-align:left; cursor:pointer; transition:all 0.15s; font-family:var(--font-body);" onmouseover="this.style.borderColor='var(--cta)'; this.style.background='var(--cta-light)'" onmouseout="this.style.borderColor='var(--border-subtle)'; this.style.background='var(--surface-card)'">
+              <span class="material-symbols-outlined" style="font-size:18px; color:var(--cta); margin-bottom:var(--s-100); display:block;">account_balance</span>
+              <span style="font-size:13px; font-weight:500; color:var(--text-primary); display:block;">DDA reversal process</span>
+              <span style="font-size:11px; color:var(--text-tertiary); margin-top:2px; display:block;">How do reversals work?</span>
+            </button>
+            <button style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:12px; padding:var(--s-200) var(--s-200); text-align:left; cursor:pointer; transition:all 0.15s; font-family:var(--font-body);" onmouseover="this.style.borderColor='var(--cta)'; this.style.background='var(--cta-light)'" onmouseout="this.style.borderColor='var(--border-subtle)'; this.style.background='var(--surface-card)'">
+              <span class="material-symbols-outlined" style="font-size:18px; color:var(--cta); margin-bottom:var(--s-100); display:block;">hub</span>
+              <span style="font-size:13px; font-weight:500; color:var(--text-primary); display:block;">Node architecture</span>
+              <span style="font-size:11px; color:var(--text-tertiary); margin-top:2px; display:block;">Canton node setup guide</span>
+            </button>
+            <button style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:12px; padding:var(--s-200) var(--s-200); text-align:left; cursor:pointer; transition:all 0.15s; font-family:var(--font-body);" onmouseover="this.style.borderColor='var(--cta)'; this.style.background='var(--cta-light)'" onmouseout="this.style.borderColor='var(--border-subtle)'; this.style.background='var(--surface-card)'">
+              <span class="material-symbols-outlined" style="font-size:18px; color:var(--cta); margin-bottom:var(--s-100); display:block;">gavel</span>
+              <span style="font-size:13px; font-weight:500; color:var(--text-primary); display:block;">Governance model</span>
+              <span style="font-size:11px; color:var(--text-tertiary); margin-top:2px; display:block;">Network rules & policies</span>
+            </button>
+            <button style="background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:12px; padding:var(--s-200) var(--s-200); text-align:left; cursor:pointer; transition:all 0.15s; font-family:var(--font-body);" onmouseover="this.style.borderColor='var(--cta)'; this.style.background='var(--cta-light)'" onmouseout="this.style.borderColor='var(--border-subtle)'; this.style.background='var(--surface-card)'">
+              <span class="material-symbols-outlined" style="font-size:18px; color:var(--cta); margin-bottom:var(--s-100); display:block;">verified</span>
+              <span style="font-size:13px; font-weight:500; color:var(--text-primary); display:block;">Settlement finality</span>
+              <span style="font-size:11px; color:var(--text-tertiary); margin-top:2px; display:block;">When are transactions final?</span>
+            </button>
+          </div>
+        </div>
+        <div class="input-container" style="width:100%; max-width:720px;">
           <div class="input-box">
             <button class="icon-btn"><span class="material-symbols-outlined">attach_file</span></button>
             <input type="text" placeholder="Ask a question about your documents…" />
