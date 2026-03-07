@@ -4,251 +4,863 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Knowledge Assistant</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          "surface-primary": "#FFFFFF",
-          "surface-secondary": "#FAFAFA",
-          "surface-tertiary": "#F5F5F4",
-          "border-subtle": "#E7E5E4",
-          "text-primary": "#1C1917",
-          "text-secondary": "#57534E",
-          "text-tertiary": "#A8A29E",
-          "brand": "#1E40AF",
-          "brand-light": "#EFF6FF",
-          "interactive": "#3B82F6",
-          "verified": "#059669",
-          "verified-light": "#ECFDF5",
-          "accent-gold": "#D97706",
-          "accent-gold-light": "#FFFBEB",
-          "accent-purple": "#7C3AED",
-          "accent-purple-light": "#F5F3FF",
-        },
-        fontFamily: {
-          "sans": ["Inter", "system-ui", "sans-serif"],
-        },
-        spacing: {
-          "salt-25": "2px",
-          "salt-50": "4px",
-          "salt-100": "8px",
-          "salt-150": "12px",
-          "salt-200": "16px",
-          "salt-300": "24px",
-          "salt-400": "32px",
-          "salt-600": "48px",
-          "salt-800": "64px",
-        },
-        fontSize: {
-          "salt-notation": ["11px", { lineHeight: "14px" }],
-          "salt-label": ["12px", { lineHeight: "16px", fontWeight: "600" }],
-          "salt-body": ["13px", { lineHeight: "17px" }],
-          "salt-body-lg": ["14px", { lineHeight: "18px" }],
-          "salt-action": ["14px", { lineHeight: "18px", fontWeight: "600" }],
-          "salt-h4": ["16px", { lineHeight: "21px", fontWeight: "600" }],
-          "salt-h3": ["18px", { lineHeight: "23px", fontWeight: "600" }],
-          "salt-h2": ["20px", { lineHeight: "26px", fontWeight: "700" }],
-          "salt-h1": ["24px", { lineHeight: "31px", fontWeight: "700" }],
-        },
-      },
-    },
-  }
-</script>
 <style>
-  body { font-family: 'Inter', system-ui, sans-serif; }
-  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 10px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
+  :root {
+    /* Salt 4px grid — medium density */
+    --s-25: 2px; --s-50: 4px; --s-100: 8px; --s-150: 12px;
+    --s-200: 16px; --s-300: 24px; --s-400: 32px; --s-600: 48px;
+
+    /* Surfaces */
+    --surface-page: #FAFAF9;
+    --surface-card: #FFFFFF;
+    --surface-hover: #F5F5F4;
+    --surface-inset: #FAFAF9;
+
+    /* Borders */
+    --border-subtle: #E7E5E4;
+    --border-emphasis: #D6D3D1;
+
+    /* Text */
+    --text-primary: #1C1917;
+    --text-secondary: #57534E;
+    --text-tertiary: #A8A29E;
+    --text-inverse: #FFFFFF;
+
+    /* Brand */
+    --brand: #1E40AF;
+    --brand-hover: #1E3A8A;
+    --brand-light: #EFF6FF;
+    --brand-muted: #DBEAFE;
+    --interactive: #3B82F6;
+
+    /* Semantic */
+    --gold: #D97706;
+    --gold-light: #FFFBEB;
+    --purple: #7C3AED;
+    --purple-light: #F5F3FF;
+    --green: #059669;
+    --green-light: #ECFDF5;
+
+    /* Typography */
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--surface-page);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar */
+  .scroll-area::-webkit-scrollbar { width: 3px; }
+  .scroll-area::-webkit-scrollbar-track { background: transparent; }
+  .scroll-area::-webkit-scrollbar-thumb { background: var(--border-emphasis); border-radius: 8px; }
+
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 272px;
+    flex-shrink: 0;
+    background: var(--surface-card);
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: var(--s-300) var(--s-300) var(--s-200);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: var(--s-150);
+  }
+
+  .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--brand);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .brand-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  }
+
+  .brand-icon .material-symbols-outlined {
+    color: var(--text-inverse);
+    font-size: 20px;
+    font-variation-settings: 'FILL' 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .brand-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    line-height: 1;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .brand-subtitle {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 3px;
+  }
+
+  .sidebar-actions { padding: var(--s-200) var(--s-200) var(--s-100); }
+
+  .btn-new-chat {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-100);
+    background: var(--brand);
+    color: var(--text-inverse);
+    border: none;
+    padding: 10px var(--s-200);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-new-chat:hover { background: var(--brand-hover); }
+  .btn-new-chat:active { transform: scale(0.98); }
+  .btn-new-chat .material-symbols-outlined { font-size: 18px; }
+
+  /* Chat history */
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--s-100) var(--s-100) var(--s-200);
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: var(--s-100) var(--s-100) var(--s-50);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    padding: var(--s-100) var(--s-100);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    text-decoration: none;
+    position: relative;
+  }
+
+  .nav-item span.label {
+    font-size: 13px;
+    font-weight: 450;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-item .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  .nav-item:hover {
+    background: var(--surface-hover);
+  }
+  .nav-item:hover span.label { color: var(--text-primary); }
+
+  .nav-item.active {
+    background: var(--brand-light);
+  }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+    width: 3px;
+    background: var(--brand);
+    border-radius: 0 3px 3px 0;
+  }
+  .nav-item.active span.label {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  .nav-item.active .material-symbols-outlined { color: var(--brand); }
+
+  /* Sources widget */
+  .sidebar-footer {
+    padding: var(--s-200);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .sources-card {
+    background: var(--surface-hover);
+    border-radius: 12px;
+    padding: var(--s-200);
+  }
+
+  .sources-header {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    margin-bottom: var(--s-150);
+  }
+
+  .sources-header .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .sources-header h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .sources-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .sources-stat strong {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--brand);
+  }
+
+  .sources-bar {
+    height: 3px;
+    background: var(--border-subtle);
+    border-radius: 4px;
+    margin-top: var(--s-100);
+    overflow: hidden;
+  }
+
+  .sources-bar-fill {
+    height: 100%;
+    width: 75%;
+    background: var(--interactive);
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-page);
+    position: relative;
+  }
+
+  /* Header */
+  .main-header {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--s-400);
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .header-left h2 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .header-left .model-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  .header-left .model-tag strong {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+  }
+
+  .version-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    background: var(--surface-hover);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .icon-btn {
+    width: 34px; height: 34px;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+  }
+  .icon-btn:hover { background: var(--surface-hover); color: var(--text-secondary); }
+  .icon-btn .material-symbols-outlined { font-size: 20px; }
+
+  /* Disclaimer */
+  .disclaimer-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    padding: var(--s-100) var(--s-400);
+    background: var(--brand-light);
+    border-bottom: 1px solid var(--brand-muted);
+    font-size: 11px;
+    color: var(--brand);
+    font-weight: 500;
+  }
+  .disclaimer-bar .material-symbols-outlined { font-size: 15px; }
+
+  /* Chat area */
+  .chat-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--s-600) var(--s-400);
+  }
+
+  .chat-thread {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-600);
+  }
+
+  /* Message — User */
+  .msg-user {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .msg-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--s-100);
+    padding-right: var(--s-50);
+  }
+
+  .msg-user .msg-label { color: var(--text-tertiary); }
+
+  .msg-user .msg-bubble {
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px 20px 4px 20px;
+    padding: var(--s-200) var(--s-300);
+    max-width: 80%;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  /* Message — Assistant */
+  .msg-assistant {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .msg-assistant-header {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    margin-bottom: var(--s-100);
+  }
+
+  .assistant-avatar {
+    width: 22px; height: 22px;
+    background: var(--brand-light);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+  }
+  .assistant-avatar .material-symbols-outlined {
+    font-size: 14px;
+    color: var(--brand);
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .msg-assistant .msg-label {
+    color: var(--brand);
+    font-weight: 700;
+    padding-right: 0;
+  }
+
+  .source-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gold);
+    background: var(--gold-light);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: var(--s-50);
+  }
+  .source-count .material-symbols-outlined { font-size: 12px; }
+
+  /* Response card */
+  .response-card {
+    width: 100%;
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px 20px 20px 4px;
+    overflow: hidden;
+  }
+
+  .response-body {
+    padding: var(--s-300) var(--s-400) var(--s-300);
+  }
+
+  .response-body > p:first-child {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: var(--s-300);
+  }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: var(--s-300); }
+
+  .step {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: var(--s-150);
+    align-items: start;
+  }
+
+  .step-number {
+    width: 32px; height: 32px;
+    background: var(--brand-light);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--brand);
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .step-content p {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* Citations footer */
+  .citations-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    padding: var(--s-150) var(--s-400);
+    border-top: 1px solid var(--border-subtle);
+    background: var(--surface-inset);
+    flex-wrap: wrap;
+  }
+
+  .citations-footer .cite-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-right: var(--s-50);
+  }
+
+  .citation-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--purple);
+    background: var(--purple-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.12s;
+    text-decoration: none;
+    border: none;
+  }
+  .citation-pill:hover { background: #EDE9FE; }
+  .citation-pill .material-symbols-outlined { font-size: 12px; }
+
+  /* Source panel */
+  .source-panel {
+    margin-top: var(--s-150);
+    width: 100%;
+  }
+
+  .source-panel summary {
+    display: flex;
+    align-items: center;
+    gap: var(--s-100);
+    padding: var(--s-150) var(--s-200);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    transition: background 0.12s;
+  }
+  .source-panel summary:hover { background: var(--surface-hover); }
+  .source-panel summary::-webkit-details-marker { display: none; }
+  .source-panel summary .material-symbols-outlined {
+    font-size: 16px;
+    color: var(--text-tertiary);
+    transition: transform 0.2s;
+  }
+  .source-panel[open] summary .chevron { transform: rotate(90deg); }
+
+  .source-panel-content {
+    margin-top: var(--s-100);
+    padding: var(--s-200) var(--s-300);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    position: relative;
+  }
+
+  .source-panel-content::before {
+    content: '';
+    position: absolute;
+    left: var(--s-200);
+    top: var(--s-200);
+    bottom: var(--s-200);
+    width: 2px;
+    background: var(--interactive);
+    border-radius: 2px;
+  }
+
+  .source-panel-content blockquote {
+    margin-left: var(--s-200);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* ── Input area ── */
+  .input-area {
+    padding: var(--s-300) var(--s-400) var(--s-300);
+    background: linear-gradient(to top, var(--surface-page) 70%, transparent);
+  }
+
+  .input-container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .input-box {
+    display: flex;
+    align-items: center;
+    gap: var(--s-50);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input-box:focus-within {
+    border-color: var(--interactive);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+  }
+
+  .input-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-primary);
+    padding: 10px var(--s-150);
+  }
+  .input-box input::placeholder { color: var(--text-tertiary); }
+
+  .input-box .icon-btn { flex-shrink: 0; }
+
+  .send-btn {
+    width: 36px; height: 36px;
+    background: var(--brand);
+    border: none;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: var(--text-inverse);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .send-btn:hover { background: var(--brand-hover); }
+  .send-btn:active { transform: scale(0.94); }
+  .send-btn .material-symbols-outlined { font-size: 18px; }
+
+  .input-disclaimer {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: var(--s-100);
+    letter-spacing: 0.01em;
+  }
+
+  /* Entrance animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-user, .msg-assistant {
+    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .msg-assistant { animation-delay: 0.08s; }
+
+  .step {
+    animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .step:nth-child(1) { animation-delay: 0.12s; }
+  .step:nth-child(2) { animation-delay: 0.2s; }
+  .step:nth-child(3) { animation-delay: 0.28s; }
 </style>
 </head>
-<body class="bg-surface-secondary text-text-primary font-sans antialiased">
-<div class="flex h-screen overflow-hidden">
+<body>
+<div class="app">
 
-  <!-- ============================================ -->
-  <!-- SIDEBAR (280px)                              -->
-  <!-- ============================================ -->
-  <aside class="w-[280px] flex-shrink-0 bg-surface-primary border-r border-border-subtle flex flex-col">
-    <!-- Brand -->
-    <div class="p-salt-300">
-      <div class="flex items-center gap-salt-150 mb-salt-400">
-        <div class="w-9 h-9 rounded-lg bg-brand flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-[20px]" style="font-variation-settings: 'FILL' 1">bolt</span>
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined">bolt</span>
         </div>
         <div>
-          <h1 class="text-salt-h4 text-text-primary leading-none">Knowledge Assistant</h1>
-          <p class="text-salt-notation text-text-tertiary uppercase tracking-[0.1em] font-semibold mt-0.5">Internal RAG System</p>
-        </div>
-      </div>
-
-      <!-- New Chat Button -->
-      <button class="w-full flex items-center justify-center gap-salt-100 bg-brand hover:bg-blue-900 text-white font-semibold py-2.5 px-salt-200 rounded-lg transition-colors mb-salt-300">
-        <span class="material-symbols-outlined text-[18px]">add</span>
-        <span class="text-salt-action">New Chat</span>
-      </button>
-
-      <!-- Chat History -->
-      <div class="space-y-0.5 overflow-y-auto scrollbar-thin flex-1">
-        <p class="text-salt-label text-text-tertiary uppercase tracking-[0.08em] px-salt-150 mb-salt-100">Recent</p>
-
-        <!-- Active Chat -->
-        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg bg-brand-light border-l-2 border-brand cursor-pointer">
-          <span class="material-symbols-outlined text-brand text-[20px]">chat_bubble</span>
-          <span class="text-salt-body font-medium text-brand truncate">DDA reversal process</span>
-        </div>
-
-        <!-- Inactive Chats -->
-        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
-          <span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
-          <span class="text-salt-body font-medium truncate">Canton node architecture</span>
-        </div>
-        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
-          <span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
-          <span class="text-salt-body font-medium truncate">Network governance model</span>
+          <div class="brand-title">Knowledge Assistant</div>
+          <div class="brand-subtitle">Internal RAG System</div>
         </div>
       </div>
     </div>
 
-    <!-- Document Sources -->
-    <div class="mt-auto p-salt-200 border-t border-border-subtle">
-      <div class="bg-surface-tertiary rounded-xl p-salt-200">
-        <div class="flex items-center gap-salt-100 mb-salt-150">
-          <span class="material-symbols-outlined text-text-secondary text-[18px]">database</span>
-          <h3 class="text-salt-label font-semibold text-text-primary">Document Sources</h3>
+    <div class="sidebar-actions">
+      <button class="btn-new-chat">
+        <span class="material-symbols-outlined">add</span>
+        New Chat
+      </button>
+    </div>
+
+    <nav class="sidebar-nav scroll-area">
+      <div class="nav-section-label">Recent</div>
+      <a class="nav-item active">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">chat_bubble</span>
+        <span class="label">DDA reversal process</span>
+      </a>
+      <a class="nav-item">
+        <span class="material-symbols-outlined">chat_bubble_outline</span>
+        <span class="label">Canton node architecture</span>
+      </a>
+      <a class="nav-item">
+        <span class="material-symbols-outlined">chat_bubble_outline</span>
+        <span class="label">Network governance model</span>
+      </a>
+      <a class="nav-item">
+        <span class="material-symbols-outlined">chat_bubble_outline</span>
+        <span class="label">Settlement finality rules</span>
+      </a>
+      <a class="nav-item">
+        <span class="material-symbols-outlined">chat_bubble_outline</span>
+        <span class="label">Participant onboarding flow</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sources-card">
+        <div class="sources-header">
+          <span class="material-symbols-outlined">database</span>
+          <h3>Document Sources</h3>
         </div>
-        <div class="flex justify-between items-center text-salt-label">
-          <span class="text-text-secondary">Indexed content</span>
-          <span class="text-brand font-mono font-semibold">147 pages</span>
+        <div class="sources-stat">
+          <span>Indexed content</span>
+          <strong>147 pages</strong>
         </div>
-        <div class="w-full bg-border-subtle h-1 rounded-full mt-salt-100">
-          <div class="bg-interactive h-1 rounded-full" style="width: 75%"></div>
+        <div class="sources-bar">
+          <div class="sources-bar-fill"></div>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- ============================================ -->
-  <!-- MAIN CONTENT                                 -->
-  <!-- ============================================ -->
-  <main class="flex-1 flex flex-col bg-surface-secondary relative">
-
-    <!-- Header -->
-    <header class="h-14 flex items-center justify-between px-salt-400 border-b border-border-subtle bg-surface-primary">
-      <div class="flex flex-col">
-        <h2 class="text-salt-h4 text-text-primary leading-none">Knowledge Assistant</h2>
-        <span class="text-salt-label text-text-tertiary mt-0.5">Model: <span class="text-text-secondary font-medium">Claude (Internal)</span></span>
+  <!-- ─── Main ─── -->
+  <main class="main">
+    <header class="main-header">
+      <div class="header-left">
+        <h2>Knowledge Assistant</h2>
+        <div class="model-tag">
+          Model: <strong>&nbsp;Claude (Internal)</strong>
+        </div>
       </div>
-      <div class="flex items-center gap-salt-150">
-        <div class="px-salt-100 py-1 rounded-md bg-surface-tertiary text-salt-label text-text-secondary font-mono">v2.4.0</div>
-        <button class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-surface-tertiary text-text-secondary transition-colors">
-          <span class="material-symbols-outlined text-[20px]">settings</span>
+      <div class="header-right">
+        <span class="version-badge">v2.4.0</span>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">settings</span>
         </button>
       </div>
     </header>
 
-    <!-- AI Disclaimer Banner -->
-    <div class="px-salt-400 py-salt-100 bg-brand-light border-b border-blue-100">
-      <div class="max-w-3xl mx-auto flex items-center gap-salt-100">
-        <span class="material-symbols-outlined text-brand text-[16px]">info</span>
-        <p class="text-salt-label text-brand">AI-assisted responses — verify against source documents</p>
-      </div>
+    <div class="disclaimer-bar">
+      <span class="material-symbols-outlined">info</span>
+      AI-assisted responses — verify against source documents
     </div>
 
-    <!-- Chat Messages -->
-    <div class="flex-1 overflow-y-auto scrollbar-thin py-salt-400 px-salt-200">
-      <div class="max-w-3xl mx-auto space-y-salt-400">
+    <div class="chat-scroll scroll-area">
+      <div class="chat-thread">
 
-        <!-- User Message -->
-        <div class="flex flex-col items-end">
-          <span class="text-salt-label text-text-tertiary uppercase tracking-[0.1em] mb-salt-100 mr-salt-100">You</span>
-          <div class="bg-surface-primary border border-border-subtle px-salt-300 py-salt-200 rounded-2xl rounded-tr-sm max-w-[85%] shadow-sm">
-            <p class="text-salt-body-lg text-text-primary">How does the DDA reversal process work?</p>
-          </div>
+        <!-- User message -->
+        <div class="msg-user">
+          <div class="msg-label">You</div>
+          <div class="msg-bubble">How does the DDA reversal process work?</div>
         </div>
 
-        <!-- Assistant Message -->
-        <div class="flex flex-col items-start">
-          <div class="flex items-center gap-salt-100 mb-salt-100 ml-salt-100">
-            <div class="w-5 h-5 rounded bg-brand-light flex items-center justify-center">
-              <span class="material-symbols-outlined text-brand text-[14px]" style="font-variation-settings: 'FILL' 1">bolt</span>
+        <!-- Assistant message -->
+        <div class="msg-assistant">
+          <div class="msg-assistant-header">
+            <div class="assistant-avatar">
+              <span class="material-symbols-outlined">bolt</span>
             </div>
-            <span class="text-salt-label text-brand uppercase tracking-[0.1em] font-bold">Assistant</span>
-            <div class="flex items-center gap-1 ml-salt-100 px-2 py-0.5 rounded-full bg-accent-gold-light">
-              <span class="material-symbols-outlined text-accent-gold text-[14px]">description</span>
-              <span class="text-[10px] text-accent-gold font-semibold">3 sources matched</span>
+            <div class="msg-label">Assistant</div>
+            <div class="source-count">
+              <span class="material-symbols-outlined">description</span>
+              3 sources matched
             </div>
           </div>
 
-          <!-- Response Card -->
-          <div class="bg-surface-primary border border-border-subtle px-salt-300 py-salt-300 rounded-2xl rounded-tl-sm w-full shadow-sm">
-            <p class="text-salt-body-lg text-text-primary mb-salt-200 leading-relaxed">The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
+          <div class="response-card">
+            <div class="response-body">
+              <p>The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
 
-            <div class="space-y-salt-200 mb-salt-300">
-              <!-- Step 1 -->
-              <div class="flex gap-salt-150">
-                <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-label font-bold text-brand">1</span>
+              <div class="steps">
+                <div class="step">
+                  <div class="step-number">1</div>
+                  <div class="step-content">
+                    <h4>Verification</h4>
+                    <p>Confirm the transaction status directly within the monitoring dashboard to ensure the original settlement was successful and is eligible for reversal.</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-salt-body-lg font-semibold text-text-primary">Verification</p>
-                  <p class="text-salt-body text-text-secondary mt-0.5">Confirm the transaction status directly within the monitoring dashboard to ensure the original settlement was successful and is eligible for reversal.</p>
-                </div>
-              </div>
 
-              <!-- Step 2 -->
-              <div class="flex gap-salt-150">
-                <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-label font-bold text-brand">2</span>
+                <div class="step">
+                  <div class="step-number">2</div>
+                  <div class="step-content">
+                    <h4>Initiating</h4>
+                    <p>Submit the reversal request through the official operations portal. This step generates a cryptographic challenge that must be signed by the originating node.</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-salt-body-lg font-semibold text-text-primary">Initiating</p>
-                  <p class="text-salt-body text-text-secondary mt-0.5">Submit the reversal request through the official operations portal. This step generates a cryptographic challenge that must be signed by the originating node.</p>
-                </div>
-              </div>
 
-              <!-- Step 3 -->
-              <div class="flex gap-salt-150">
-                <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-label font-bold text-brand">3</span>
-                </div>
-                <div>
-                  <p class="text-salt-body-lg font-semibold text-text-primary">Approval</p>
-                  <p class="text-salt-body text-text-secondary mt-0.5">A secondary authorization from a designated compliance officer is required for the final ledger settlement to prevent unauthorized fund movements.</p>
+                <div class="step">
+                  <div class="step-number">3</div>
+                  <div class="step-content">
+                    <h4>Approval</h4>
+                    <p>A secondary authorization from a designated compliance officer is required for the final ledger settlement to prevent unauthorized fund movements.</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Citation Badges -->
-            <div class="flex flex-wrap gap-salt-100 pt-salt-200 border-t border-border-subtle">
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent-purple-light text-[11px] text-accent-purple font-mono font-medium cursor-pointer hover:bg-purple-100 transition-colors">
-                <span class="material-symbols-outlined text-[12px]">description</span>
+            <div class="citations-footer">
+              <span class="cite-label">Sources</span>
+              <button class="citation-pill">
+                <span class="material-symbols-outlined">description</span>
                 dda-operations.md, §4
-              </span>
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent-purple-light text-[11px] text-accent-purple font-mono font-medium cursor-pointer hover:bg-purple-100 transition-colors">
-                <span class="material-symbols-outlined text-[12px]">description</span>
+              </button>
+              <button class="citation-pill">
+                <span class="material-symbols-outlined">description</span>
                 dda-reversal-procedures.md, §2
-              </span>
+              </button>
             </div>
           </div>
 
-          <!-- Source Panel (Collapsible) -->
-          <details class="mt-salt-150 w-full group">
-            <summary class="flex items-center gap-salt-100 px-salt-200 py-salt-150 bg-surface-tertiary border border-border-subtle rounded-xl cursor-pointer hover:bg-stone-100 transition-colors list-none">
-              <span class="material-symbols-outlined text-text-secondary text-[16px] group-open:rotate-90 transition-transform">chevron_right</span>
-              <span class="material-symbols-outlined text-text-secondary text-[16px]">description</span>
-              <span class="text-salt-label font-semibold text-text-secondary uppercase tracking-[0.06em]">Source: dda-operations.md</span>
+          <!-- Source panel -->
+          <details class="source-panel">
+            <summary>
+              <span class="material-symbols-outlined chevron">chevron_right</span>
+              <span class="material-symbols-outlined">description</span>
+              Source: dda-operations.md
             </summary>
-            <div class="mt-salt-100 px-salt-200 py-salt-150 bg-surface-tertiary border border-border-subtle rounded-xl">
-              <div class="relative pl-salt-200">
-                <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-interactive rounded-full"></div>
-                <blockquote class="text-salt-body text-text-secondary italic leading-relaxed">
-                  "Verify the transaction status in the monitoring dashboard... All DDA reversals must undergo the dual-signature verification protocol (DSVP) before being broadcast to the consensus layer to maintain network integrity."
-                </blockquote>
-              </div>
+            <div class="source-panel-content">
+              <blockquote>
+                "Verify the transaction status in the monitoring dashboard… All DDA reversals must undergo the dual-signature verification protocol (DSVP) before being broadcast to the consensus layer to maintain network integrity."
+              </blockquote>
             </div>
           </details>
         </div>
@@ -256,28 +868,21 @@
       </div>
     </div>
 
-    <!-- Input Area -->
-    <div class="p-salt-300 bg-gradient-to-t from-surface-secondary via-surface-secondary to-transparent">
-      <div class="max-w-3xl mx-auto">
-        <div class="bg-surface-primary border border-border-subtle rounded-2xl p-1.5 flex items-center shadow-sm hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-interactive focus-within:ring-offset-1">
-          <button class="p-2 text-text-tertiary hover:text-text-secondary rounded-lg hover:bg-surface-tertiary transition-colors">
-            <span class="material-symbols-outlined text-[20px]">attach_file</span>
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-container">
+        <div class="input-box">
+          <button class="icon-btn">
+            <span class="material-symbols-outlined">attach_file</span>
           </button>
-          <input
-            class="flex-1 bg-transparent border-none focus:ring-0 text-salt-body-lg text-text-primary placeholder-text-tertiary px-salt-150 py-2.5"
-            placeholder="Ask a question about your documents..."
-            type="text"
-          />
-          <button class="w-9 h-9 rounded-full bg-brand flex items-center justify-center text-white hover:bg-blue-900 active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[18px]">arrow_upward</span>
+          <input type="text" placeholder="Ask a question about your documents…" />
+          <button class="send-btn">
+            <span class="material-symbols-outlined">arrow_upward</span>
           </button>
         </div>
-        <p class="text-center text-[10px] text-text-tertiary mt-salt-100">
-          AI-generated responses may be inaccurate. Cross-reference with documentation.
-        </p>
+        <p class="input-disclaimer">AI-generated responses may be inaccurate. Cross-reference with documentation.</p>
       </div>
     </div>
-
   </main>
 
 </div>
