@@ -8,704 +8,435 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    /* Salt 4px grid — medium density */
     --s-25: 2px; --s-50: 4px; --s-100: 8px; --s-150: 12px;
     --s-200: 16px; --s-300: 24px; --s-400: 32px; --s-600: 48px;
 
-    /* Surfaces — warm premium whites */
     --surface-page: #FAFAFA;
     --surface-card: #FFFFFF;
     --surface-hover: #F5F5F4;
     --surface-inset: #F5F5F4;
-    --surface-sidebar: #FAFAFA;
-    --surface-elevated: #FFFFFF;
 
-    /* Borders — warm grays */
     --border-subtle: #E7E5E4;
     --border-emphasis: #D6D3D1;
 
-    /* Text */
     --text-primary: #1C1917;
     --text-secondary: #57534E;
     --text-tertiary: #A8A29E;
     --text-inverse: #FFFFFF;
 
-    /* Confidence blues */
     --brand: #1E40AF;
     --brand-hover: #1E3A8A;
     --brand-light: #EFF6FF;
     --brand-muted: #DBEAFE;
     --interactive: #3B82F6;
 
-    /* Premium accents */
-    --gold: #D97706;
-    --gold-light: #FFFBEB;
-    --gold-muted: #FEF3C7;
+    --cta: #D97706;
+    --cta-hover: #B45309;
+    --cta-light: #FFFBEB;
+    --cta-muted: #FEF3C7;
+
     --purple: #7C3AED;
     --purple-light: #F5F3FF;
 
-    /* Assurance green */
     --green: #059669;
     --green-light: #ECFDF5;
 
-    /* Typography */
     --font-display: 'DM Serif Display', Georgia, serif;
     --font-body: 'DM Sans', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: var(--font-body);
     background: var(--surface-page);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Scrollbar */
   .scroll-area::-webkit-scrollbar { width: 3px; }
   .scroll-area::-webkit-scrollbar-track { background: transparent; }
   .scroll-area::-webkit-scrollbar-thumb { background: var(--border-emphasis); border-radius: 8px; }
 
-  /* Layout */
   .app { display: flex; height: 100vh; overflow: hidden; }
 
   /* ── Sidebar ── */
   .sidebar {
-    width: 272px;
-    flex-shrink: 0;
-    background: var(--surface-sidebar);
+    width: 272px; flex-shrink: 0;
+    background: var(--surface-page);
     border-right: 1px solid var(--border-subtle);
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
   }
 
   .sidebar-brand {
     padding: var(--s-300) var(--s-300) var(--s-200);
     border-bottom: 1px solid var(--border-subtle);
-    border-top: 3px solid var(--brand);
+    border-top: 3px solid var(--cta);
   }
-
-  .brand-mark {
-    display: flex;
-    align-items: center;
-    gap: var(--s-150);
-  }
+  .brand-mark { display: flex; align-items: center; gap: var(--s-150); }
 
   .brand-icon {
     width: 36px; height: 36px;
-    background: var(--brand);
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(30, 64, 175, 0.2), 0 0 0 1px rgba(30, 64, 175, 0.05);
+    background: linear-gradient(135deg, var(--cta) 0%, #B45309 100%);
+    border-radius: 10px; display: grid; place-items: center;
+    position: relative; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.25);
   }
-
   .brand-icon::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(145deg, rgba(255,255,255,0.18) 0%, transparent 50%);
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(145deg, rgba(255,255,255,0.2) 0%, transparent 50%);
   }
-
   .brand-icon .material-symbols-outlined {
-    color: var(--text-inverse);
-    font-size: 20px;
-    font-variation-settings: 'FILL' 1;
-    position: relative;
-    z-index: 1;
+    color: var(--text-inverse); font-size: 20px;
+    font-variation-settings: 'FILL' 1; position: relative; z-index: 1;
   }
 
   .brand-title {
-    font-family: var(--font-display);
-    font-size: 18px;
-    line-height: 1;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
+    font-family: var(--font-display); font-size: 18px;
+    line-height: 1; color: var(--text-primary); letter-spacing: -0.01em;
   }
-
   .brand-subtitle {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-top: 3px;
+    font-size: 10px; font-weight: 500; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.12em; margin-top: 3px;
   }
 
   .sidebar-actions { padding: var(--s-200) var(--s-200) var(--s-100); }
 
   .btn-new-chat {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--s-100);
-    background: var(--brand);
-    color: var(--text-inverse);
-    border: none;
-    padding: 10px var(--s-200);
-    border-radius: 10px;
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-    box-shadow: 0 1px 2px rgba(30, 64, 175, 0.15);
+    width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: var(--s-100); background: var(--cta); color: var(--text-inverse);
+    border: none; padding: 10px var(--s-200); border-radius: 10px;
+    font-family: var(--font-body); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.2);
   }
-  .btn-new-chat:hover { background: var(--brand-hover); box-shadow: 0 2px 6px rgba(30, 64, 175, 0.2); }
+  .btn-new-chat:hover { background: var(--cta-hover); box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25); }
   .btn-new-chat:active { transform: scale(0.98); }
   .btn-new-chat .material-symbols-outlined { font-size: 18px; }
 
-  /* Chat history */
-  .sidebar-nav {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--s-100) var(--s-100) var(--s-200);
-  }
-
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: var(--s-100) var(--s-100) var(--s-200); }
   .nav-section-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    font-size: 10px; font-weight: 600; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.1em;
     padding: var(--s-100) var(--s-100) var(--s-50);
   }
-
   .nav-item {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-    padding: var(--s-100) var(--s-100);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.12s, color 0.12s;
-    text-decoration: none;
-    position: relative;
+    display: flex; align-items: center; gap: var(--s-100);
+    padding: var(--s-100); border-radius: 8px; cursor: pointer;
+    transition: background 0.12s; text-decoration: none; position: relative;
   }
-
   .nav-item span.label {
-    font-size: 13px;
-    font-weight: 450;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 13px; font-weight: 450; color: var(--text-secondary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-
-  .nav-item .material-symbols-outlined {
-    font-size: 18px;
-    color: var(--text-tertiary);
-    flex-shrink: 0;
-  }
-
-  .nav-item:hover {
-    background: var(--surface-hover);
-  }
+  .nav-item .material-symbols-outlined { font-size: 18px; color: var(--text-tertiary); flex-shrink: 0; }
+  .nav-item:hover { background: var(--surface-hover); }
   .nav-item:hover span.label { color: var(--text-primary); }
 
-  .nav-item.active {
-    background: var(--brand-light);
-  }
+  .nav-item.active { background: var(--cta-light); }
   .nav-item.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 6px;
-    bottom: 6px;
-    width: 3px;
-    background: var(--brand);
-    border-radius: 0 3px 3px 0;
+    content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+    width: 3px; background: var(--cta); border-radius: 0 3px 3px 0;
   }
-  .nav-item.active span.label {
-    color: var(--brand);
-    font-weight: 500;
-  }
-  .nav-item.active .material-symbols-outlined { color: var(--brand); }
+  .nav-item.active span.label { color: var(--cta-hover); font-weight: 500; }
+  .nav-item.active .material-symbols-outlined { color: var(--cta); }
 
-  /* Sources widget */
-  .sidebar-footer {
-    padding: var(--s-200);
-    border-top: 1px solid var(--border-subtle);
-  }
-
+  .sidebar-footer { padding: var(--s-200); border-top: 1px solid var(--border-subtle); }
   .sources-card {
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: var(--s-200);
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: 12px; padding: var(--s-200);
   }
-
-  .sources-header {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-    margin-bottom: var(--s-150);
-  }
-
-  .sources-header .material-symbols-outlined {
-    font-size: 16px;
-    color: var(--text-secondary);
-  }
-
+  .sources-header { display: flex; align-items: center; gap: var(--s-100); margin-bottom: var(--s-150); }
+  .sources-header .material-symbols-outlined { font-size: 16px; color: var(--cta); }
   .sources-header h3 {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 11px; font-weight: 600; color: var(--text-primary);
+    text-transform: uppercase; letter-spacing: 0.06em;
   }
-
   .sources-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    color: var(--text-secondary);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--text-secondary);
   }
-
-  .sources-stat strong {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--brand);
-  }
-
-  .sources-bar {
-    height: 3px;
-    background: var(--border-subtle);
-    border-radius: 4px;
-    margin-top: var(--s-100);
-    overflow: hidden;
-  }
-
+  .sources-stat strong { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--cta); }
+  .sources-bar { height: 3px; background: var(--border-subtle); border-radius: 4px; margin-top: var(--s-100); overflow: hidden; }
   .sources-bar-fill {
-    height: 100%;
-    width: 75%;
-    background: var(--interactive);
-    border-radius: 4px;
+    height: 100%; width: 75%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--cta) 0%, #F59E0B 100%);
     transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* ── Main ── */
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: var(--surface-page);
-    position: relative;
-  }
+  .main { flex: 1; display: flex; flex-direction: column; background: var(--surface-page); position: relative; }
 
-  /* Header */
   .main-header {
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--s-400);
-    background: var(--surface-card);
+    height: 56px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--s-400); background: var(--surface-card);
     border-bottom: 1px solid var(--border-subtle);
     box-shadow: 0 1px 0 rgba(0,0,0,0.02);
   }
-
-  .header-left h2 {
-    font-family: var(--font-display);
-    font-size: 17px;
-    color: var(--text-primary);
-    line-height: 1;
+  .header-left h2 { font-family: var(--font-display); font-size: 17px; color: var(--text-primary); line-height: 1; }
+  .header-left .model-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .header-left .model-tag strong { font-weight: 500; color: var(--text-secondary); }
+  .header-right { display: flex; align-items: center; gap: var(--s-100); }
+  .header-tabs { display: flex; gap: 2px; }
+  .header-tab {
+    padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    color: var(--text-secondary); background: transparent; border: none;
+    cursor: pointer; transition: all 0.12s;
   }
-
-  .header-left .model-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    color: var(--text-tertiary);
-    margin-top: 2px;
-  }
-
-  .header-left .model-tag strong {
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-  }
+  .header-tab:hover { background: var(--surface-hover); color: var(--text-primary); }
+  .header-tab.active { background: var(--cta-light); color: var(--cta-hover); font-weight: 600; }
 
   .version-badge {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-tertiary);
-    background: var(--surface-hover);
-    padding: 3px 8px;
-    border-radius: 6px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    color: var(--text-tertiary); background: var(--surface-hover);
+    padding: 3px 8px; border-radius: 6px;
   }
-
   .icon-btn {
-    width: 34px; height: 34px;
-    display: grid;
-    place-items: center;
-    border: none;
-    background: transparent;
-    border-radius: 8px;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    transition: background 0.12s, color 0.12s;
+    width: 34px; height: 34px; display: grid; place-items: center;
+    border: none; background: transparent; border-radius: 8px;
+    color: var(--text-tertiary); cursor: pointer; transition: all 0.12s;
   }
   .icon-btn:hover { background: var(--surface-hover); color: var(--text-secondary); }
   .icon-btn .material-symbols-outlined { font-size: 20px; }
 
-  /* Disclaimer */
   .disclaimer-bar {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
+    display: flex; align-items: center; gap: var(--s-100);
     padding: var(--s-100) var(--s-400);
-    background: var(--brand-light);
-    border-bottom: 1px solid var(--brand-muted);
-    font-size: 11px;
-    color: var(--brand);
-    font-weight: 500;
+    background: var(--cta-light); border-bottom: 1px solid var(--cta-muted);
+    font-size: 11px; color: var(--cta); font-weight: 500;
   }
   .disclaimer-bar .material-symbols-outlined { font-size: 15px; }
 
-  /* Chat area */
-  .chat-scroll {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--s-600) var(--s-400);
-  }
+  /* ── Views ── */
+  .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+  .view.active { display: flex; }
 
-  .chat-thread {
-    max-width: 720px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-600);
-  }
+  /* ── Chat View ── */
+  .chat-scroll { flex: 1; overflow-y: auto; padding: var(--s-600) var(--s-400); }
+  .chat-thread { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--s-600); }
 
-  /* Message — User */
-  .msg-user {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .msg-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--s-100);
-    padding-right: var(--s-50);
-  }
-
+  .msg-user { display: flex; flex-direction: column; align-items: flex-end; }
+  .msg-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--s-100); padding-right: var(--s-50); }
   .msg-user .msg-label { color: var(--text-tertiary); }
-
   .msg-user .msg-bubble {
-    background: var(--brand-light);
-    border: 1px solid var(--brand-muted);
-    border-radius: 20px 20px 4px 20px;
-    padding: var(--s-200) var(--s-300);
-    max-width: 80%;
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--brand);
+    background: var(--brand-light); border: 1px solid var(--brand-muted);
+    border-radius: 20px 20px 4px 20px; padding: var(--s-200) var(--s-300);
+    max-width: 80%; font-size: 14px; line-height: 1.5; color: var(--brand);
   }
 
-  /* Message — Assistant */
-  .msg-assistant {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .msg-assistant-header {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-    margin-bottom: var(--s-100);
-  }
-
+  .msg-assistant { display: flex; flex-direction: column; align-items: flex-start; }
+  .msg-assistant-header { display: flex; align-items: center; gap: var(--s-100); margin-bottom: var(--s-100); }
   .assistant-avatar {
-    width: 22px; height: 22px;
-    background: var(--brand-light);
-    border-radius: 6px;
-    display: grid;
-    place-items: center;
+    width: 22px; height: 22px; background: var(--cta-light);
+    border-radius: 6px; display: grid; place-items: center;
   }
-  .assistant-avatar .material-symbols-outlined {
-    font-size: 14px;
-    color: var(--brand);
-    font-variation-settings: 'FILL' 1;
-  }
-
-  .msg-assistant .msg-label {
-    color: var(--brand);
-    font-weight: 700;
-    padding-right: 0;
-  }
+  .assistant-avatar .material-symbols-outlined { font-size: 14px; color: var(--cta); font-variation-settings: 'FILL' 1; }
+  .msg-assistant .msg-label { color: var(--cta-hover); font-weight: 700; padding-right: 0; }
 
   .source-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--gold);
-    background: var(--gold-light);
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: var(--s-50);
+    display: inline-flex; align-items: center; gap: 3px; font-size: 10px;
+    font-weight: 600; color: var(--cta); background: var(--cta-light);
+    padding: 2px 8px; border-radius: 20px; margin-left: var(--s-50);
+    border: 1px solid var(--cta-muted);
   }
   .source-count .material-symbols-outlined { font-size: 12px; }
 
-  /* Response card */
   .response-card {
-    width: 100%;
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 20px 20px 20px 4px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(28, 25, 23, 0.04), 0 1px 2px rgba(28, 25, 23, 0.02);
+    width: 100%; background: var(--surface-card);
+    border: 1px solid var(--border-subtle); border-radius: 20px 20px 20px 4px;
+    overflow: hidden; box-shadow: 0 1px 3px rgba(28,25,23,0.04);
   }
+  .response-body { padding: var(--s-300) var(--s-400); }
+  .response-body > p:first-child { font-size: 15px; line-height: 1.6; color: var(--text-primary); margin-bottom: var(--s-300); }
 
-  .response-body {
-    padding: var(--s-300) var(--s-400) var(--s-300);
-  }
-
-  .response-body > p:first-child {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--text-primary);
-    margin-bottom: var(--s-300);
-  }
-
-  /* Steps */
   .steps { display: flex; flex-direction: column; gap: var(--s-300); }
-
-  .step {
-    display: grid;
-    grid-template-columns: 32px 1fr;
-    gap: var(--s-150);
-    align-items: start;
-  }
-
+  .step { display: grid; grid-template-columns: 32px 1fr; gap: var(--s-150); align-items: start; }
   .step-number {
-    width: 32px; height: 32px;
-    background: var(--brand-light);
-    border: 1px solid var(--brand-muted);
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    font-family: var(--font-display);
-    font-size: 15px;
-    color: var(--brand);
-    flex-shrink: 0;
+    width: 32px; height: 32px; background: var(--cta-light);
+    border: 1px solid var(--cta-muted); border-radius: 10px;
+    display: grid; place-items: center; font-family: var(--font-display);
+    font-size: 15px; color: var(--cta); flex-shrink: 0;
   }
+  .step-content h4 { font-family: var(--font-display); font-size: 15px; color: var(--text-primary); margin-bottom: 2px; }
+  .step-content p { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
 
-  .step-content h4 {
-    font-family: var(--font-display);
-    font-size: 15px;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-  }
-
-  .step-content p {
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--text-secondary);
-  }
-
-  /* Citations footer */
   .citations-footer {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-    padding: var(--s-150) var(--s-400);
-    border-top: 1px solid var(--border-subtle);
-    background: var(--surface-inset);
-    flex-wrap: wrap;
+    display: flex; align-items: center; gap: var(--s-100);
+    padding: var(--s-150) var(--s-400); border-top: 1px solid var(--border-subtle);
+    background: var(--surface-inset); flex-wrap: wrap;
   }
-
-  .citations-footer .cite-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
-    margin-right: var(--s-50);
-  }
+  .citations-footer .cite-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-right: var(--s-50); }
 
   .citation-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--purple);
-    background: var(--purple-light);
-    padding: 4px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.12s;
-    text-decoration: none;
-    border: none;
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    color: var(--purple); background: var(--purple-light);
+    padding: 4px 10px; border-radius: 20px; cursor: pointer;
+    transition: background 0.12s; border: none;
   }
   .citation-pill:hover { background: #EDE9FE; }
   .citation-pill .material-symbols-outlined { font-size: 12px; }
 
-  /* Source panel */
-  .source-panel {
-    margin-top: var(--s-150);
-    width: 100%;
-  }
-
+  .source-panel { margin-top: var(--s-150); width: 100%; }
   .source-panel summary {
-    display: flex;
-    align-items: center;
-    gap: var(--s-100);
-    padding: var(--s-150) var(--s-200);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    cursor: pointer;
-    list-style: none;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-secondary);
+    display: flex; align-items: center; gap: var(--s-100);
+    padding: var(--s-150) var(--s-200); background: var(--surface-card);
+    border: 1px solid var(--border-subtle); border-radius: 12px;
+    cursor: pointer; list-style: none; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary);
     transition: background 0.12s;
   }
   .source-panel summary:hover { background: var(--surface-hover); }
   .source-panel summary::-webkit-details-marker { display: none; }
-  .source-panel summary .material-symbols-outlined {
-    font-size: 16px;
-    color: var(--text-tertiary);
-    transition: transform 0.2s;
-  }
+  .source-panel summary .material-symbols-outlined { font-size: 16px; color: var(--text-tertiary); transition: transform 0.2s; }
   .source-panel[open] summary .chevron { transform: rotate(90deg); }
 
   .source-panel-content {
-    margin-top: var(--s-100);
-    padding: var(--s-200) var(--s-300);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    position: relative;
+    margin-top: var(--s-100); padding: var(--s-200) var(--s-300);
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: 12px; position: relative;
   }
-
   .source-panel-content::before {
-    content: '';
-    position: absolute;
-    left: var(--s-200);
-    top: var(--s-200);
-    bottom: var(--s-200);
-    width: 2px;
-    background: var(--interactive);
-    border-radius: 2px;
+    content: ''; position: absolute; left: var(--s-200); top: var(--s-200); bottom: var(--s-200);
+    width: 2px; background: var(--cta); border-radius: 2px;
   }
-
   .source-panel-content blockquote {
-    margin-left: var(--s-200);
-    font-size: 13px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    font-style: italic;
+    margin-left: var(--s-200); font-size: 13px; line-height: 1.65;
+    color: var(--text-secondary); font-style: italic;
   }
 
-  /* ── Input area ── */
-  .input-area {
-    padding: var(--s-300) var(--s-400) var(--s-300);
-    background: linear-gradient(to top, var(--surface-page) 70%, transparent);
-  }
-
-  .input-container {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-
+  .input-area { padding: var(--s-300) var(--s-400); background: linear-gradient(to top, var(--surface-page) 70%, transparent); }
+  .input-container { max-width: 720px; margin: 0 auto; }
   .input-box {
-    display: flex;
-    align-items: center;
-    gap: var(--s-50);
-    background: var(--surface-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-    padding: 6px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04), 0 1px 2px rgba(28, 25, 23, 0.02);
+    display: flex; align-items: center; gap: var(--s-50);
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: 16px; padding: 6px; transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(28,25,23,0.04);
   }
-
-  .input-box:focus-within {
-    border-color: var(--interactive);
-    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.1), 0 0 0 3px rgba(59, 130, 246, 0.06);
-  }
-
+  .input-box:focus-within { border-color: var(--cta); box-shadow: 0 2px 12px rgba(217,119,6,0.08), 0 0 0 3px rgba(217,119,6,0.06); }
   .input-box input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: var(--font-body);
-    font-size: 14px;
-    color: var(--text-primary);
+    flex: 1; border: none; outline: none; background: transparent;
+    font-family: var(--font-body); font-size: 14px; color: var(--text-primary);
     padding: 10px var(--s-150);
   }
   .input-box input::placeholder { color: var(--text-tertiary); }
-
   .input-box .icon-btn { flex-shrink: 0; }
 
   .send-btn {
-    width: 36px; height: 36px;
-    background: var(--brand);
-    border: none;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    color: var(--text-inverse);
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-    box-shadow: 0 1px 3px rgba(30, 64, 175, 0.2);
+    width: 36px; height: 36px; background: var(--cta); border: none;
+    border-radius: 12px; display: grid; place-items: center;
+    color: var(--text-inverse); cursor: pointer; flex-shrink: 0;
+    transition: all 0.15s; box-shadow: 0 1px 3px rgba(217,119,6,0.2);
   }
-  .send-btn:hover { background: var(--brand-hover); box-shadow: 0 2px 8px rgba(30, 64, 175, 0.25); }
+  .send-btn:hover { background: var(--cta-hover); box-shadow: 0 2px 8px rgba(217,119,6,0.3); }
   .send-btn:active { transform: scale(0.94); }
   .send-btn .material-symbols-outlined { font-size: 18px; }
 
-  .input-disclaimer {
-    text-align: center;
-    font-size: 10px;
-    color: var(--text-tertiary);
-    margin-top: var(--s-100);
-    letter-spacing: 0.01em;
+  .input-disclaimer { text-align: center; font-size: 10px; color: var(--text-tertiary); margin-top: var(--s-100); }
+
+  /* ── Document Sources View ── */
+  .sources-view { flex: 1; overflow-y: auto; padding: var(--s-400); }
+  .sources-grid { max-width: 860px; margin: 0 auto; }
+  .sources-grid h3 { font-family: var(--font-display); font-size: 20px; color: var(--text-primary); margin-bottom: var(--s-100); }
+  .sources-grid .subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--s-400); }
+
+  .source-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-200); margin-bottom: var(--s-400); }
+  .stat-card {
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: 12px; padding: var(--s-300);
+  }
+  .stat-card .stat-value {
+    font-family: var(--font-display); font-size: 28px; color: var(--text-primary); line-height: 1;
+  }
+  .stat-card .stat-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-top: var(--s-100); }
+  .stat-card .stat-bar { height: 3px; background: var(--border-subtle); border-radius: 4px; margin-top: var(--s-150); overflow: hidden; }
+  .stat-card .stat-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cta) 0%, #F59E0B 100%); }
+
+  .doc-table { width: 100%; border-collapse: collapse; }
+  .doc-table thead th {
+    font-size: 10px; font-weight: 600; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: var(--s-100) var(--s-200); text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .doc-table tbody td {
+    padding: var(--s-150) var(--s-200); font-size: 13px; color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-subtle); vertical-align: middle;
+  }
+  .doc-table tbody tr:hover { background: var(--surface-hover); }
+  .doc-table .doc-name {
+    font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: var(--s-100);
+  }
+  .doc-table .doc-name .material-symbols-outlined { font-size: 18px; color: var(--cta); }
+  .doc-table .doc-pages { font-family: var(--font-mono); font-size: 12px; }
+
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  }
+  .status-badge.indexed { color: var(--green); background: var(--green-light); }
+  .status-badge.pending { color: var(--cta); background: var(--cta-light); }
+  .status-badge .material-symbols-outlined { font-size: 13px; }
+
+  /* ── Settings View ── */
+  .settings-view { flex: 1; overflow-y: auto; padding: var(--s-400); }
+  .settings-grid { max-width: 640px; margin: 0 auto; }
+  .settings-grid h3 { font-family: var(--font-display); font-size: 20px; color: var(--text-primary); margin-bottom: var(--s-100); }
+  .settings-grid .subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--s-400); }
+
+  .settings-section {
+    background: var(--surface-card); border: 1px solid var(--border-subtle);
+    border-radius: 12px; margin-bottom: var(--s-300); overflow: hidden;
+  }
+  .settings-section-header {
+    padding: var(--s-200) var(--s-300); border-bottom: 1px solid var(--border-subtle);
+    display: flex; align-items: center; gap: var(--s-100);
+  }
+  .settings-section-header .material-symbols-outlined { font-size: 18px; color: var(--cta); }
+  .settings-section-header h4 {
+    font-size: 13px; font-weight: 600; color: var(--text-primary);
+    text-transform: uppercase; letter-spacing: 0.04em;
   }
 
-  /* Entrance animations */
+  .settings-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: var(--s-200) var(--s-300); border-bottom: 1px solid var(--border-subtle);
+  }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-row-left h5 { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .settings-row-left p { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+  .select-field {
+    font-family: var(--font-body); font-size: 13px; color: var(--text-primary);
+    background: var(--surface-page); border: 1px solid var(--border-subtle);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%23A8A29E' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+    padding-right: 28px;
+  }
+
+  .toggle {
+    width: 40px; height: 22px; border-radius: 11px;
+    background: var(--border-emphasis); border: none; cursor: pointer;
+    position: relative; transition: background 0.2s; flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--text-inverse); transition: transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .toggle.on { background: var(--cta); }
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
-  .msg-user, .msg-assistant {
-    animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
+  .msg-user, .msg-assistant { animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
   .msg-assistant { animation-delay: 0.08s; }
-
-  .step {
-    animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
+  .step { animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
   .step:nth-child(1) { animation-delay: 0.12s; }
   .step:nth-child(2) { animation-delay: 0.2s; }
   .step:nth-child(3) { animation-delay: 0.28s; }
@@ -714,7 +445,6 @@
 <body>
 <div class="app">
 
-  <!-- ─── Sidebar ─── -->
   <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="brand-mark">
@@ -727,17 +457,15 @@
         </div>
       </div>
     </div>
-
     <div class="sidebar-actions">
       <button class="btn-new-chat">
         <span class="material-symbols-outlined">add</span>
         New Chat
       </button>
     </div>
-
     <nav class="sidebar-nav scroll-area">
       <div class="nav-section-label">Recent</div>
-      <a class="nav-item active">
+      <a class="nav-item active" onclick="switchView('chat')">
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">chat_bubble</span>
         <span class="label">DDA reversal process</span>
       </a>
@@ -758,7 +486,6 @@
         <span class="label">Participant onboarding flow</span>
       </a>
     </nav>
-
     <div class="sidebar-footer">
       <div class="sources-card">
         <div class="sources-header">
@@ -776,129 +503,300 @@
     </div>
   </aside>
 
-  <!-- ─── Main ─── -->
   <main class="main">
     <header class="main-header">
       <div class="header-left">
         <h2>Knowledge Assistant</h2>
-        <div class="model-tag">
-          Model: <strong>&nbsp;Claude (Internal)</strong>
-        </div>
+        <div class="model-tag">Model: <strong>&nbsp;Claude (Internal)</strong></div>
       </div>
       <div class="header-right">
+        <div class="header-tabs">
+          <button class="header-tab active" onclick="switchView('chat')">Chat</button>
+          <button class="header-tab" onclick="switchView('sources')">Sources</button>
+          <button class="header-tab" onclick="switchView('settings')">Settings</button>
+        </div>
         <span class="version-badge">v2.4.0</span>
-        <button class="icon-btn">
-          <span class="material-symbols-outlined">settings</span>
-        </button>
       </div>
     </header>
 
-    <div class="disclaimer-bar">
-      <span class="material-symbols-outlined">info</span>
-      AI-assisted responses — verify against source documents
-    </div>
-
-    <div class="chat-scroll scroll-area">
-      <div class="chat-thread">
-
-        <!-- User message -->
-        <div class="msg-user">
-          <div class="msg-label">You</div>
-          <div class="msg-bubble">How does the DDA reversal process work?</div>
-        </div>
-
-        <!-- Assistant message -->
-        <div class="msg-assistant">
-          <div class="msg-assistant-header">
-            <div class="assistant-avatar">
-              <span class="material-symbols-outlined">bolt</span>
-            </div>
-            <div class="msg-label">Assistant</div>
-            <div class="source-count">
-              <span class="material-symbols-outlined">description</span>
-              3 sources matched
-            </div>
+    <!-- ═══ Chat View ═══ -->
+    <div class="view active" id="view-chat">
+      <div class="disclaimer-bar">
+        <span class="material-symbols-outlined">info</span>
+        AI-assisted responses — verify against source documents
+      </div>
+      <div class="chat-scroll scroll-area">
+        <div class="chat-thread">
+          <div class="msg-user">
+            <div class="msg-label">You</div>
+            <div class="msg-bubble">How does the DDA reversal process work?</div>
           </div>
-
-          <div class="response-card">
-            <div class="response-body">
-              <p>The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
-
-              <div class="steps">
-                <div class="step">
-                  <div class="step-number">1</div>
-                  <div class="step-content">
-                    <h4>Verification</h4>
-                    <p>Confirm the transaction status directly within the monitoring dashboard to ensure the original settlement was successful and is eligible for reversal.</p>
+          <div class="msg-assistant">
+            <div class="msg-assistant-header">
+              <div class="assistant-avatar"><span class="material-symbols-outlined">bolt</span></div>
+              <div class="msg-label">Assistant</div>
+              <div class="source-count">
+                <span class="material-symbols-outlined">description</span>
+                3 sources matched
+              </div>
+            </div>
+            <div class="response-card">
+              <div class="response-body">
+                <p>The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
+                <div class="steps">
+                  <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                      <h4>Verification</h4>
+                      <p>Confirm the transaction status directly within the monitoring dashboard to ensure the original settlement was successful and is eligible for reversal.</p>
+                    </div>
                   </div>
-                </div>
-
-                <div class="step">
-                  <div class="step-number">2</div>
-                  <div class="step-content">
-                    <h4>Initiating</h4>
-                    <p>Submit the reversal request through the official operations portal. This step generates a cryptographic challenge that must be signed by the originating node.</p>
+                  <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                      <h4>Initiating</h4>
+                      <p>Submit the reversal request through the official operations portal. This step generates a cryptographic challenge that must be signed by the originating node.</p>
+                    </div>
                   </div>
-                </div>
-
-                <div class="step">
-                  <div class="step-number">3</div>
-                  <div class="step-content">
-                    <h4>Approval</h4>
-                    <p>A secondary authorization from a designated compliance officer is required for the final ledger settlement to prevent unauthorized fund movements.</p>
+                  <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                      <h4>Approval</h4>
+                      <p>A secondary authorization from a designated compliance officer is required for the final ledger settlement to prevent unauthorized fund movements.</p>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="citations-footer">
+                <span class="cite-label">Sources</span>
+                <button class="citation-pill"><span class="material-symbols-outlined">description</span> dda-operations.md, §4</button>
+                <button class="citation-pill"><span class="material-symbols-outlined">description</span> dda-reversal-procedures.md, §2</button>
+              </div>
             </div>
+            <details class="source-panel">
+              <summary>
+                <span class="material-symbols-outlined chevron">chevron_right</span>
+                <span class="material-symbols-outlined">description</span>
+                Source: dda-operations.md
+              </summary>
+              <div class="source-panel-content">
+                <blockquote>"Verify the transaction status in the monitoring dashboard… All DDA reversals must undergo the dual-signature verification protocol (DSVP) before being broadcast to the consensus layer to maintain network integrity."</blockquote>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+      <div class="input-area">
+        <div class="input-container">
+          <div class="input-box">
+            <button class="icon-btn"><span class="material-symbols-outlined">attach_file</span></button>
+            <input type="text" placeholder="Ask a question about your documents…" />
+            <button class="send-btn"><span class="material-symbols-outlined">arrow_upward</span></button>
+          </div>
+          <p class="input-disclaimer">AI-generated responses may be inaccurate. Cross-reference with documentation.</p>
+        </div>
+      </div>
+    </div>
 
-            <div class="citations-footer">
-              <span class="cite-label">Sources</span>
-              <button class="citation-pill">
-                <span class="material-symbols-outlined">description</span>
-                dda-operations.md, §4
-              </button>
-              <button class="citation-pill">
-                <span class="material-symbols-outlined">description</span>
-                dda-reversal-procedures.md, §2
-              </button>
+    <!-- ═══ Sources View ═══ -->
+    <div class="view" id="view-sources">
+      <div class="sources-view scroll-area">
+        <div class="sources-grid">
+          <h3>Document Sources</h3>
+          <p class="subtitle">Indexed documents powering the knowledge assistant</p>
+
+          <div class="source-stats-row">
+            <div class="stat-card">
+              <div class="stat-value">147</div>
+              <div class="stat-label">Total Pages</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width: 100%"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">12</div>
+              <div class="stat-label">Documents</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width: 80%"></div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">98%</div>
+              <div class="stat-label">Indexed</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="width: 98%"></div></div>
             </div>
           </div>
 
-          <!-- Source panel -->
-          <details class="source-panel">
-            <summary>
-              <span class="material-symbols-outlined chevron">chevron_right</span>
-              <span class="material-symbols-outlined">description</span>
-              Source: dda-operations.md
-            </summary>
-            <div class="source-panel-content">
-              <blockquote>
-                "Verify the transaction status in the monitoring dashboard… All DDA reversals must undergo the dual-signature verification protocol (DSVP) before being broadcast to the consensus layer to maintain network integrity."
-              </blockquote>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Document</th>
+                <th>Pages</th>
+                <th>Last Indexed</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>dda-operations.md</span></td>
+                <td class="doc-pages">24</td>
+                <td>2 hours ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>dda-reversal-procedures.md</span></td>
+                <td class="doc-pages">18</td>
+                <td>2 hours ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>canton-node-setup.md</span></td>
+                <td class="doc-pages">32</td>
+                <td>5 hours ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>network-governance.md</span></td>
+                <td class="doc-pages">15</td>
+                <td>1 day ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>settlement-finality.md</span></td>
+                <td class="doc-pages">21</td>
+                <td>1 day ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>participant-onboarding.md</span></td>
+                <td class="doc-pages">28</td>
+                <td>2 days ago</td>
+                <td><span class="status-badge indexed"><span class="material-symbols-outlined">check_circle</span>Indexed</span></td>
+              </tr>
+              <tr>
+                <td><span class="doc-name"><span class="material-symbols-outlined">description</span>api-reference-v3.md</span></td>
+                <td class="doc-pages">9</td>
+                <td>3 days ago</td>
+                <td><span class="status-badge pending"><span class="material-symbols-outlined">schedule</span>Re-indexing</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Settings View ═══ -->
+    <div class="view" id="view-settings">
+      <div class="settings-view scroll-area">
+        <div class="settings-grid">
+          <h3>Settings</h3>
+          <p class="subtitle">Configure model, sources, and display preferences</p>
+
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <span class="material-symbols-outlined">smart_toy</span>
+              <h4>Model Configuration</h4>
             </div>
-          </details>
-        </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Language Model</h5>
+                <p>Select the model powering responses</p>
+              </div>
+              <select class="select-field">
+                <option>Claude 3.5 Sonnet (Internal)</option>
+                <option>Claude 3 Opus (Internal)</option>
+                <option>Claude 3 Haiku (Internal)</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Temperature</h5>
+                <p>Lower values for factual, higher for creative</p>
+              </div>
+              <select class="select-field">
+                <option>0.1 — Precise</option>
+                <option selected>0.3 — Balanced</option>
+                <option>0.7 — Creative</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Max Response Length</h5>
+                <p>Maximum tokens per response</p>
+              </div>
+              <select class="select-field">
+                <option>1024 tokens</option>
+                <option selected>2048 tokens</option>
+                <option>4096 tokens</option>
+              </select>
+            </div>
+          </div>
 
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <span class="material-symbols-outlined">visibility</span>
+              <h4>Display Preferences</h4>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Show Source Citations</h5>
+                <p>Display document references in responses</p>
+              </div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Auto-expand Sources</h5>
+                <p>Automatically show source excerpts</p>
+              </div>
+              <button class="toggle" onclick="this.classList.toggle('on')"></button>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Confidence Indicators</h5>
+                <p>Show source match count per response</p>
+              </div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-section-header">
+              <span class="material-symbols-outlined">security</span>
+              <h4>Data & Privacy</h4>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Chat History Retention</h5>
+                <p>How long conversations are stored</p>
+              </div>
+              <select class="select-field">
+                <option>7 days</option>
+                <option selected>30 days</option>
+                <option>90 days</option>
+                <option>No retention</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <h5>Usage Analytics</h5>
+                <p>Share anonymized usage data to improve the system</p>
+              </div>
+              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Input -->
-    <div class="input-area">
-      <div class="input-container">
-        <div class="input-box">
-          <button class="icon-btn">
-            <span class="material-symbols-outlined">attach_file</span>
-          </button>
-          <input type="text" placeholder="Ask a question about your documents…" />
-          <button class="send-btn">
-            <span class="material-symbols-outlined">arrow_upward</span>
-          </button>
-        </div>
-        <p class="input-disclaimer">AI-generated responses may be inaccurate. Cross-reference with documentation.</p>
-      </div>
-    </div>
   </main>
-
 </div>
+
+<script>
+function switchView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.header-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.header-tab').forEach(t => {
+    if (t.textContent.toLowerCase() === view) t.classList.add('active');
+  });
+}
+</script>
 </body>
 </html>
