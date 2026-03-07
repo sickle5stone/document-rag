@@ -33,21 +33,26 @@
           "sans": ["Inter", "system-ui", "sans-serif"],
         },
         spacing: {
-          "salt-xs": "4px",
-          "salt-sm": "8px",
-          "salt-md": "12px",
-          "salt-base": "16px",
-          "salt-lg": "24px",
-          "salt-xl": "32px",
-          "salt-2xl": "48px",
+          "salt-25": "2px",
+          "salt-50": "4px",
+          "salt-100": "8px",
+          "salt-150": "12px",
+          "salt-200": "16px",
+          "salt-300": "24px",
+          "salt-400": "32px",
+          "salt-600": "48px",
+          "salt-800": "64px",
         },
         fontSize: {
-          "salt-label": ["11px", { lineHeight: "16px", fontWeight: "600" }],
-          "salt-caption": ["12px", { lineHeight: "16px" }],
-          "salt-body": ["13px", { lineHeight: "20px" }],
-          "salt-body-lg": ["14px", { lineHeight: "20px" }],
-          "salt-heading": ["16px", { lineHeight: "24px", fontWeight: "600" }],
-          "salt-title": ["20px", { lineHeight: "28px", fontWeight: "700" }],
+          "salt-notation": ["11px", { lineHeight: "14px" }],
+          "salt-label": ["12px", { lineHeight: "16px", fontWeight: "600" }],
+          "salt-body": ["13px", { lineHeight: "17px" }],
+          "salt-body-lg": ["14px", { lineHeight: "18px" }],
+          "salt-action": ["14px", { lineHeight: "18px", fontWeight: "600" }],
+          "salt-h4": ["16px", { lineHeight: "21px", fontWeight: "600" }],
+          "salt-h3": ["18px", { lineHeight: "23px", fontWeight: "600" }],
+          "salt-h2": ["20px", { lineHeight: "26px", fontWeight: "700" }],
+          "salt-h1": ["24px", { lineHeight: "31px", fontWeight: "700" }],
         },
       },
     },
@@ -69,39 +74,39 @@
   <!-- ============================================ -->
   <aside class="w-[280px] flex-shrink-0 bg-surface-primary border-r border-border-subtle flex flex-col">
     <!-- Brand -->
-    <div class="p-salt-lg">
-      <div class="flex items-center gap-salt-md mb-salt-xl">
+    <div class="p-salt-300">
+      <div class="flex items-center gap-salt-150 mb-salt-400">
         <div class="w-9 h-9 rounded-lg bg-brand flex items-center justify-center">
           <span class="material-symbols-outlined text-white text-[20px]" style="font-variation-settings: 'FILL' 1">bolt</span>
         </div>
         <div>
-          <h1 class="text-salt-heading text-text-primary leading-none">Knowledge Assistant</h1>
-          <p class="text-salt-label text-text-tertiary uppercase tracking-[0.1em] mt-0.5">Internal RAG System</p>
+          <h1 class="text-salt-h4 text-text-primary leading-none">Knowledge Assistant</h1>
+          <p class="text-salt-notation text-text-tertiary uppercase tracking-[0.1em] font-semibold mt-0.5">Internal RAG System</p>
         </div>
       </div>
 
       <!-- New Chat Button -->
-      <button class="w-full flex items-center justify-center gap-salt-sm bg-brand hover:bg-blue-900 text-white font-semibold py-2.5 px-salt-base rounded-lg transition-colors mb-salt-lg">
+      <button class="w-full flex items-center justify-center gap-salt-100 bg-brand hover:bg-blue-900 text-white font-semibold py-2.5 px-salt-200 rounded-lg transition-colors mb-salt-300">
         <span class="material-symbols-outlined text-[18px]">add</span>
-        <span class="text-salt-body-lg">New Chat</span>
+        <span class="text-salt-action">New Chat</span>
       </button>
 
       <!-- Chat History -->
       <div class="space-y-0.5 overflow-y-auto scrollbar-thin flex-1">
-        <p class="text-salt-label text-text-tertiary uppercase tracking-[0.08em] px-salt-md mb-salt-sm">Recent</p>
+        <p class="text-salt-label text-text-tertiary uppercase tracking-[0.08em] px-salt-150 mb-salt-100">Recent</p>
 
         <!-- Active Chat -->
-        <div class="flex items-center gap-salt-md px-salt-md py-2.5 rounded-lg bg-brand-light border-l-2 border-brand cursor-pointer">
+        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg bg-brand-light border-l-2 border-brand cursor-pointer">
           <span class="material-symbols-outlined text-brand text-[20px]">chat_bubble</span>
           <span class="text-salt-body font-medium text-brand truncate">DDA reversal process</span>
         </div>
 
         <!-- Inactive Chats -->
-        <div class="flex items-center gap-salt-md px-salt-md py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
+        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
           <span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
           <span class="text-salt-body font-medium truncate">Canton node architecture</span>
         </div>
-        <div class="flex items-center gap-salt-md px-salt-md py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
+        <div class="flex items-center gap-salt-150 px-salt-150 py-2.5 rounded-lg hover:bg-surface-tertiary text-text-secondary hover:text-text-primary cursor-pointer transition-colors">
           <span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
           <span class="text-salt-body font-medium truncate">Network governance model</span>
         </div>
@@ -109,17 +114,17 @@
     </div>
 
     <!-- Document Sources -->
-    <div class="mt-auto p-salt-base border-t border-border-subtle">
-      <div class="bg-surface-tertiary rounded-xl p-salt-base">
-        <div class="flex items-center gap-salt-sm mb-salt-md">
+    <div class="mt-auto p-salt-200 border-t border-border-subtle">
+      <div class="bg-surface-tertiary rounded-xl p-salt-200">
+        <div class="flex items-center gap-salt-100 mb-salt-150">
           <span class="material-symbols-outlined text-text-secondary text-[18px]">database</span>
-          <h3 class="text-salt-caption font-semibold text-text-primary">Document Sources</h3>
+          <h3 class="text-salt-label font-semibold text-text-primary">Document Sources</h3>
         </div>
         <div class="flex justify-between items-center text-salt-label">
           <span class="text-text-secondary">Indexed content</span>
           <span class="text-brand font-mono font-semibold">147 pages</span>
         </div>
-        <div class="w-full bg-border-subtle h-1 rounded-full mt-salt-sm">
+        <div class="w-full bg-border-subtle h-1 rounded-full mt-salt-100">
           <div class="bg-interactive h-1 rounded-full" style="width: 75%"></div>
         </div>
       </div>
@@ -132,13 +137,13 @@
   <main class="flex-1 flex flex-col bg-surface-secondary relative">
 
     <!-- Header -->
-    <header class="h-14 flex items-center justify-between px-salt-xl border-b border-border-subtle bg-surface-primary">
+    <header class="h-14 flex items-center justify-between px-salt-400 border-b border-border-subtle bg-surface-primary">
       <div class="flex flex-col">
-        <h2 class="text-salt-heading text-text-primary leading-none">Knowledge Assistant</h2>
+        <h2 class="text-salt-h4 text-text-primary leading-none">Knowledge Assistant</h2>
         <span class="text-salt-label text-text-tertiary mt-0.5">Model: <span class="text-text-secondary font-medium">Claude (Internal)</span></span>
       </div>
-      <div class="flex items-center gap-salt-md">
-        <div class="px-salt-sm py-1 rounded-md bg-surface-tertiary text-salt-label text-text-secondary font-mono">v2.4.0</div>
+      <div class="flex items-center gap-salt-150">
+        <div class="px-salt-100 py-1 rounded-md bg-surface-tertiary text-salt-label text-text-secondary font-mono">v2.4.0</div>
         <button class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-surface-tertiary text-text-secondary transition-colors">
           <span class="material-symbols-outlined text-[20px]">settings</span>
         </button>
@@ -146,47 +151,47 @@
     </header>
 
     <!-- AI Disclaimer Banner -->
-    <div class="px-salt-xl py-salt-sm bg-brand-light border-b border-blue-100">
-      <div class="max-w-3xl mx-auto flex items-center gap-salt-sm">
+    <div class="px-salt-400 py-salt-100 bg-brand-light border-b border-blue-100">
+      <div class="max-w-3xl mx-auto flex items-center gap-salt-100">
         <span class="material-symbols-outlined text-brand text-[16px]">info</span>
-        <p class="text-salt-caption text-brand">AI-assisted responses — verify against source documents</p>
+        <p class="text-salt-label text-brand">AI-assisted responses — verify against source documents</p>
       </div>
     </div>
 
     <!-- Chat Messages -->
-    <div class="flex-1 overflow-y-auto scrollbar-thin py-salt-xl px-salt-base">
-      <div class="max-w-3xl mx-auto space-y-salt-xl">
+    <div class="flex-1 overflow-y-auto scrollbar-thin py-salt-400 px-salt-200">
+      <div class="max-w-3xl mx-auto space-y-salt-400">
 
         <!-- User Message -->
         <div class="flex flex-col items-end">
-          <span class="text-salt-label text-text-tertiary uppercase tracking-[0.1em] mb-salt-sm mr-salt-sm">You</span>
-          <div class="bg-surface-primary border border-border-subtle px-salt-lg py-salt-base rounded-2xl rounded-tr-sm max-w-[85%] shadow-sm">
+          <span class="text-salt-label text-text-tertiary uppercase tracking-[0.1em] mb-salt-100 mr-salt-100">You</span>
+          <div class="bg-surface-primary border border-border-subtle px-salt-300 py-salt-200 rounded-2xl rounded-tr-sm max-w-[85%] shadow-sm">
             <p class="text-salt-body-lg text-text-primary">How does the DDA reversal process work?</p>
           </div>
         </div>
 
         <!-- Assistant Message -->
         <div class="flex flex-col items-start">
-          <div class="flex items-center gap-salt-sm mb-salt-sm ml-salt-sm">
+          <div class="flex items-center gap-salt-100 mb-salt-100 ml-salt-100">
             <div class="w-5 h-5 rounded bg-brand-light flex items-center justify-center">
               <span class="material-symbols-outlined text-brand text-[14px]" style="font-variation-settings: 'FILL' 1">bolt</span>
             </div>
             <span class="text-salt-label text-brand uppercase tracking-[0.1em] font-bold">Assistant</span>
-            <div class="flex items-center gap-1 ml-salt-sm px-2 py-0.5 rounded-full bg-accent-gold-light">
+            <div class="flex items-center gap-1 ml-salt-100 px-2 py-0.5 rounded-full bg-accent-gold-light">
               <span class="material-symbols-outlined text-accent-gold text-[14px]">description</span>
               <span class="text-[10px] text-accent-gold font-semibold">3 sources matched</span>
             </div>
           </div>
 
           <!-- Response Card -->
-          <div class="bg-surface-primary border border-border-subtle px-salt-lg py-salt-lg rounded-2xl rounded-tl-sm w-full shadow-sm">
-            <p class="text-salt-body-lg text-text-primary mb-salt-base leading-relaxed">The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
+          <div class="bg-surface-primary border border-border-subtle px-salt-300 py-salt-300 rounded-2xl rounded-tl-sm w-full shadow-sm">
+            <p class="text-salt-body-lg text-text-primary mb-salt-200 leading-relaxed">The DDA (Direct Deposit Accounts) reversal process is a strictly audited procedure consisting of three primary steps:</p>
 
-            <div class="space-y-salt-base mb-salt-lg">
+            <div class="space-y-salt-200 mb-salt-300">
               <!-- Step 1 -->
-              <div class="flex gap-salt-md">
+              <div class="flex gap-salt-150">
                 <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-caption font-bold text-brand">1</span>
+                  <span class="text-salt-label font-bold text-brand">1</span>
                 </div>
                 <div>
                   <p class="text-salt-body-lg font-semibold text-text-primary">Verification</p>
@@ -195,9 +200,9 @@
               </div>
 
               <!-- Step 2 -->
-              <div class="flex gap-salt-md">
+              <div class="flex gap-salt-150">
                 <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-caption font-bold text-brand">2</span>
+                  <span class="text-salt-label font-bold text-brand">2</span>
                 </div>
                 <div>
                   <p class="text-salt-body-lg font-semibold text-text-primary">Initiating</p>
@@ -206,9 +211,9 @@
               </div>
 
               <!-- Step 3 -->
-              <div class="flex gap-salt-md">
+              <div class="flex gap-salt-150">
                 <div class="w-7 h-7 rounded-lg bg-brand-light flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span class="text-salt-caption font-bold text-brand">3</span>
+                  <span class="text-salt-label font-bold text-brand">3</span>
                 </div>
                 <div>
                   <p class="text-salt-body-lg font-semibold text-text-primary">Approval</p>
@@ -218,7 +223,7 @@
             </div>
 
             <!-- Citation Badges -->
-            <div class="flex flex-wrap gap-salt-sm pt-salt-base border-t border-border-subtle">
+            <div class="flex flex-wrap gap-salt-100 pt-salt-200 border-t border-border-subtle">
               <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent-purple-light text-[11px] text-accent-purple font-mono font-medium cursor-pointer hover:bg-purple-100 transition-colors">
                 <span class="material-symbols-outlined text-[12px]">description</span>
                 dda-operations.md, §4
@@ -231,14 +236,14 @@
           </div>
 
           <!-- Source Panel (Collapsible) -->
-          <details class="mt-salt-md w-full group">
-            <summary class="flex items-center gap-salt-sm px-salt-base py-salt-md bg-surface-tertiary border border-border-subtle rounded-xl cursor-pointer hover:bg-stone-100 transition-colors list-none">
+          <details class="mt-salt-150 w-full group">
+            <summary class="flex items-center gap-salt-100 px-salt-200 py-salt-150 bg-surface-tertiary border border-border-subtle rounded-xl cursor-pointer hover:bg-stone-100 transition-colors list-none">
               <span class="material-symbols-outlined text-text-secondary text-[16px] group-open:rotate-90 transition-transform">chevron_right</span>
               <span class="material-symbols-outlined text-text-secondary text-[16px]">description</span>
-              <span class="text-salt-caption font-semibold text-text-secondary uppercase tracking-[0.06em]">Source: dda-operations.md</span>
+              <span class="text-salt-label font-semibold text-text-secondary uppercase tracking-[0.06em]">Source: dda-operations.md</span>
             </summary>
-            <div class="mt-salt-sm px-salt-base py-salt-md bg-surface-tertiary border border-border-subtle rounded-xl">
-              <div class="relative pl-salt-base">
+            <div class="mt-salt-100 px-salt-200 py-salt-150 bg-surface-tertiary border border-border-subtle rounded-xl">
+              <div class="relative pl-salt-200">
                 <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-interactive rounded-full"></div>
                 <blockquote class="text-salt-body text-text-secondary italic leading-relaxed">
                   "Verify the transaction status in the monitoring dashboard... All DDA reversals must undergo the dual-signature verification protocol (DSVP) before being broadcast to the consensus layer to maintain network integrity."
@@ -252,14 +257,14 @@
     </div>
 
     <!-- Input Area -->
-    <div class="p-salt-lg bg-gradient-to-t from-surface-secondary via-surface-secondary to-transparent">
+    <div class="p-salt-300 bg-gradient-to-t from-surface-secondary via-surface-secondary to-transparent">
       <div class="max-w-3xl mx-auto">
         <div class="bg-surface-primary border border-border-subtle rounded-2xl p-1.5 flex items-center shadow-sm hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-interactive focus-within:ring-offset-1">
           <button class="p-2 text-text-tertiary hover:text-text-secondary rounded-lg hover:bg-surface-tertiary transition-colors">
             <span class="material-symbols-outlined text-[20px]">attach_file</span>
           </button>
           <input
-            class="flex-1 bg-transparent border-none focus:ring-0 text-salt-body-lg text-text-primary placeholder-text-tertiary px-salt-md py-2.5"
+            class="flex-1 bg-transparent border-none focus:ring-0 text-salt-body-lg text-text-primary placeholder-text-tertiary px-salt-150 py-2.5"
             placeholder="Ask a question about your documents..."
             type="text"
           />
@@ -267,7 +272,7 @@
             <span class="material-symbols-outlined text-[18px]">arrow_upward</span>
           </button>
         </div>
-        <p class="text-center text-[10px] text-text-tertiary mt-salt-sm">
+        <p class="text-center text-[10px] text-text-tertiary mt-salt-100">
           AI-generated responses may be inaccurate. Cross-reference with documentation.
         </p>
       </div>
